@@ -1,0 +1,47 @@
+---
+// Edit these once and they update everywhere.
+const email = 'christianlchung@gmail.com';
+const socials = [
+  { href: 'https://www.linkedin.com/in/', label: 'LinkedIn' },
+  { href: 'https://github.com/', label: 'GitHub' },
+];
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="page footer__inner">
+    <p class="eyebrow">Open to Product &amp; UX Design roles</p>
+    <a class="footer__email" href={`mailto:${email}`}>{email}</a>
+    <ul class="footer__socials">
+      {socials.map((s) => (
+        <li><a href={s.href} rel="me noopener" target="_blank">{s.label}</a></li>
+      ))}
+    </ul>
+    <p class="footer__meta">&copy; {year} — built in the open</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-block-start: auto;
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-xl);
+  }
+  .footer__inner { display: grid; gap: var(--space-s); }
+  .footer__email {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    text-decoration: none;
+    width: fit-content;
+    border-bottom: 1px solid var(--color-border);
+    transition: border-color var(--dur-base) var(--ease-out);
+  }
+  .footer__email:hover { border-color: var(--color-text); }
+  .footer__socials {
+    display: flex; gap: var(--space-m);
+    list-style: none; padding: 0; margin: 0;
+  }
+  .footer__socials a { color: var(--color-text-muted); text-decoration: none; }
+  .footer__socials a:hover { color: var(--color-text); }
+  .footer__meta { color: var(--color-text-muted); font-size: var(--step--1); }
+</style>

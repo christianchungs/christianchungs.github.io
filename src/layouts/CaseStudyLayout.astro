@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { entry: CollectionEntry<'work'>; }
+const { entry } = Astro.props;
+const { title, summary, year, role, client, discipline, cover, coverAlt } = entry.data;
+---
+
+<BaseLayout title={`${title} — Chung`} description={summary}>
+  <article>
+    <header class="narrow stack hero" style="--flow: var(--space-m)">
+      <p class="eyebrow">{[client, year].filter(Boolean).join(' · ')}</p>
+      <h1>{title}</h1>
+      <p class="hero__summary">{summary}</p>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>{role}</dd></div>
+        {discipline.length > 0 && <div><dt>Discipline</dt><dd>{discipline.join(', ')}</dd></div>}
+        <div><dt>Year</dt><dd>{year}</dd></div>
+      </dl>
+    </header>
+
+    {cover && (
+      <figure class="page cover">
+        <Image src={cover} alt={coverAlt ?? ''} widths={[800, 1200, 1800]} sizes="100vw" />
+      </figure>
+    )}
+
+    <div class="narrow prose">
+      <slot />
+    </div>
+
+    <nav class="narrow next"><a href="/work/">← All work</a></nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .hero { padding-block: var(--space-xl) var(--space-l); }
+  .hero__summary { font-size: var(--step-1); color: var(--color-text-muted); max-width: var(--measure); }
+  .facts {
+    display: flex; flex-wrap: wrap; gap: var(--space-l);
+    padding-block-start: var(--space-s);
+    border-top: 1px solid var(--color-border);
+  }
+  .facts dt {
+    font-family: var(--font-mono); font-size: var(--step--1);
+    text-transform: uppercase; letter-spacing: var(--tracking-wide);
+    color: var(--color-text-muted);
+  }
+  .facts dd { margin: 0; }
+  .cover { margin-block: var(--space-l); }
+  .cover :global(img) { width: 100%; border-radius: var(--radius-m); }
+  .next { padding-block: var(--space-2xl); }
+  .next a { font-family: var(--font-mono); font-size: var(--step--1); text-decoration: none; }
+
+  /* Typography for the written body of a case study */
+  .prose { padding-block-end: var(--space-2xl); }
+  .prose :global(> * + *) { margin-block-start: var(--space-m); }
+  .prose :global(h2) { margin-block-start: var(--space-xl); font-size: var(--step-3); }
+  .prose :global(h3) { margin-block-start: var(--space-l); font-size: var(--step-1); }
+  .prose :global(p),
+  .prose :global(li) { max-width: var(--measure); }
+  .prose :global(ul), .prose :global(ol) { padding-inline-start: 1.25em; }
+  .prose :global(li + li) { margin-block-start: var(--space-2xs); }
+  .prose :global(img) { border-radius: var(--radius-m); border: 1px solid var(--color-border); }
+  .prose :global(figure) { margin-block: var(--space-l); }
+  .prose :global(figcaption) {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step--1); color: var(--color-text-muted);
+  }
+  .prose :global(blockquote) {
+    border-left: 2px solid var(--color-accent);
+    padding-inline-start: var(--space-s);
+    font-family: var(--font-display); font-size: var(--step-1);
+  }
+  .prose :global(hr) { border: 0; border-top: 1px solid var(--color-border); margin-block: var(--space-xl); }
+</style>

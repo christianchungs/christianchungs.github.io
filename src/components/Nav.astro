@@ -1,0 +1,82 @@
+---
+import ThemeToggle from './islands/ThemeToggle';
+const path = Astro.url.pathname;
+const links = [
+  { href: '/work/', label: 'Work' },
+  { href: '/about/', label: 'About' },
+];
+const isActive = (href: string) => path === href || path.startsWith(href);
+---
+
+<header class="nav">
+  <div class="page nav__inner">
+    <a class="nav__mark" href="/">
+      <!-- Replace this text with your logotype / mark when you have one. -->
+      Chung
+    </a>
+    <div class="nav__right">
+    <nav aria-label="Primary">
+      <ul class="nav__list">
+        {links.map((l) => (
+          <li>
+            <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <ThemeToggle client:load />
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-m);
+    padding-block: var(--space-xs);
+  }
+  .nav__mark {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    text-decoration: none;
+    letter-spacing: var(--tracking-tight);
+  }
+  .nav__right { display: flex; align-items: center; gap: var(--space-m); }
+  .nav__list {
+    display: flex;
+    gap: var(--space-m);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .nav__list a {
+    text-decoration: none;
+    color: var(--color-text-muted);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .nav__list a:hover,
+  .nav__list a[aria-current='page'] { color: var(--color-text); }
+
+  :global(.theme-toggle) {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    width: 2rem; height: 2rem;
+    display: grid; place-items: center;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: color var(--dur-fast) var(--ease-out),
+                border-color var(--dur-fast) var(--ease-out);
+  }
+  :global(.theme-toggle:hover) { color: var(--color-text); border-color: var(--color-text-muted); }
+</style>
