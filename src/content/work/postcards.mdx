@@ -1,6 +1,6 @@
 ---
-title: "Almost 13% of postcards to space showed up blank. The drawing tools weren't the problem."
-summary: "Blue Origin flies kids' drawings to space and sends them back with a stamp on them. An eighth of those drawings were never made. We spent ten weeks finding out why, and the answer changed what we built."
+title: "Almost 13% of postcards to space showed up blank. Finding out why changed what we built."
+summary: "Blue Origin flies kids' drawings to space and sends them back with a stamp on them. An eighth of those postcards were blank or barely started. Over ten weeks we worked out why, and the answer reshaped the design."
 year: 2026
 role: "Research, Usability Testing, Project Lead (Milestone 3)"
 client: "Blue Origin, Club for the Future"
@@ -20,11 +20,11 @@ import Figure from '../../components/case/Figure.astro';
 <div class="phones">
   <figure style="flex:1 1 320px;margin:0">
     <div class="shot"><img src="/images/postcards/before-canvas.webp" alt="The original postcard canvas: a blank white rectangle on dark blue with five small tool icons" loading="eager" decoding="async" /></div>
-    <figcaption><b>Before.</b> This is what a kid saw when they arrived. Pen, colour, eraser, undo, delete. No stickers, no fill, no text, and nothing telling you what to draw.</figcaption>
+    <figcaption><b>Before.</b> This is what a kid saw when they arrived. Pen, colour, eraser, undo, delete. No stickers, no fill, no text, and no prompt suggesting what to draw.</figcaption>
   </figure>
   <figure style="flex:1 1 320px;margin:0">
     <div class="shot"><img src="/images/postcards/canvas-stickers.webp" alt="The redesigned canvas with labelled tools on both sides, a prompt across the top, and a scrolling sticker tray" loading="eager" decoding="async" /></div>
-    <figcaption><b>After.</b> A prompt up top, labelled tools down both sides, and a sticker tray built out of what kids in the gallery were already trying to draw.</figcaption>
+    <figcaption><b>After.</b> A prompt up top, labelled tools down both sides, and a sticker tray built from what kids in the gallery were already trying to draw.</figcaption>
   </figure>
 </div>
 
@@ -35,75 +35,75 @@ import Figure from '../../components/case/Figure.astro';
   { value: '100+',  label: 'Sticky notes at the booth' },
 ]} />
 
-## The brief said K-12. That lasted about a week.
+## The brief said K-12. Our first conversations helped us narrow it.
 
 Club for the Future lets K-12 students draw a digital postcard. It flies to space on a New Shepard or New Glenn rocket, comes back with a "Flown to Space" stamp on it, and lands in your inbox. It runs on the website and on touchscreen kiosks in museums, and thousands of kids have done it.
 
-We took the brief at face value and started designing. Two expert interviews put a stop to that. Jason Yip from KidsTeam at the UW iSchool, and Julie Kientz, who chairs our department, both said the same thing without talking to each other: a six-year-old and a seventeen-year-old have nothing in common. Design for both at once and you'll please neither.
+We started out designing for the brief as written, and two expert interviews reshaped it early. Jason Yip from KidsTeam at the UW iSchool, and Julie Kientz, who chairs our department, each made the same point on their own: a six-year-old and a seventeen-year-old need very different things, and designing for both at once tends to serve neither well.
 
-Kientz also gave us the line that ended up shaping the whole look of the thing.
+Kientz also shared an idea that ended up guiding the whole visual direction.
 
 <Pull attr="Julie Kientz, Chair, UW Human Centered Design & Engineering">
   Kids prefer interfaces that don't feel like they were made for younger kids, even when they are.
 </Pull>
 
-So we aimed at 8 to 12 and kept the edges covered with a low floor and a high ceiling. Easy to start, plenty of depth if you go looking for it.
+So we focused on ages 8 to 12 and kept the edges covered with a low floor and a high ceiling. Easy to start, with plenty of depth for anyone who goes looking.
 
-Yip also raised the thing we hadn't thought about at all: doing research with kids under a corporate sponsor is a consent problem before it's a design problem. Kientz pointed us at UW Engineering Discovery Days, where that part was already sorted.
+Yip also raised something we hadn't considered yet: research with kids under a corporate sponsor needs a clear consent process before any design questions come up. Kientz pointed us to UW Engineering Discovery Days, where that process was already in place.
 
 ## The number that changed the project
 
-We pulled the public gallery and coded 429 postcards from missions NS 30 through NS 37. All four of us went through them separately, tagged what we saw, and clustered the results.
+We pulled the public gallery and coded 429 postcards from missions NS 30 through NS 37. All four of us went through them separately, tagged what we saw, and clustered the results together.
 
-Two things fell out. What kids do: handwritten text in 27.2% of postcards, colouring in a single-colour background by hand in 21.0%, colouring inside a shape in 13.5%, trying to blend colours in 11.0%. And what kids draw: planets in 18.4%, stars and dots in 15.4%, rockets in 12.4%.
+Two kinds of patterns started to show up. What kids do: handwritten text in 27.2% of postcards, colouring in a single-colour background by hand in 21.0%, colouring inside a shape in 13.5%, trying to blend colours in 11.0%. And what kids draw: planets in 18.4%, stars and dots in 15.4%, rockets in 12.4%.
 
-Then there was 12.9%. Blank, or barely started.
+And then there was 12.9%: postcards that were blank, or barely started. That was the number we kept coming back to.
 
-**The easy read is that the tools were too thin.** And honestly, they were. Kids were hand-filling entire backgrounds one pixel at a time because there was no fill bucket, and drawing letters by hand because there was no text tool. You can see them working around the gaps.
+**It would have been easy to read this as a tooling gap.** In places, it was one. Kids were colouring in whole backgrounds by hand because there was no fill bucket, and writing letters by hand because there was no text tool. You can see them working around what was missing.
 
-But that read only gets you halfway. A fill bucket helps the 21% who already decided to make something. It does nothing for the 12.9% who opened the page, saw a white rectangle, and closed it. So we treated the blank rate as people leaving rather than people lacking tools, which moved everything upstream into the seconds before the canvas even loads.
+This is where it started to come together for us. A fill bucket would help the 21% who had already decided to make something, but it wouldn't reach the 12.9% who opened the page, saw a white rectangle, and left. Once we treated the blank rate as people leaving rather than people missing tools, our attention moved to the first few seconds, before the canvas even loads.
 
 <Figure src="/images/postcards/gallery-affinity.webp" alt="Affinity map of hundreds of postcard thumbnails clustered into usage patterns and space imagery themes with percentage labels" lead="429 postcards, sorted.">
   What people did on the left, what they drew on the right. Those percentages became the spec for the sticker set and the backgrounds.
 </Figure>
 
-## Five decisions, and what each one cost us
+## Five decisions, and the trade-offs behind each one
 
-Every feature here traces back to something we found. So does everything we gave up to get it.
+Each feature traces back to something we learned, and so does each thing we chose to give up.
 
 <Decision num="01" title="You pick a background before you ever see the canvas">
   <Fragment slot="finding">12.9% blank, and 21.0% of the finished ones were a hand-coloured single-colour background. Kids were spending their first burst of effort filling in a rectangle.</Fragment>
-  <Fragment slot="did">Make choosing a background the first step, so nobody ever meets an empty white page.</Fragment>
-  <Fragment slot="rejected">Blank canvas plus a fill tool. Also a guided tutorial, for reasons the next card explains.</Fragment>
-  <Fragment slot="cost">If you actually wanted a plain white page, you now have to choose it. We took that trade for the 12.9%.</Fragment>
+  <Fragment slot="did">Make choosing a background the first step, so nobody starts on an empty white page.</Fragment>
+  <Fragment slot="rejected">A blank canvas plus a fill tool. Also a guided tutorial, for reasons the next decision explains.</Fragment>
+  <Fragment slot="cost">If you do want a plain white page, you now have to choose it. We felt that was worth it for the 12.9%.</Fragment>
 </Decision>
 
-<Decision num="02" title="We built an onboarding tutorial, then deleted it">
-  <Fragment slot="finding">Every single participant skipped the instructions, in both rounds of testing. The younger ones didn't even register small body text. The older ones tried to read it and said it was too small.</Fragment>
-  <Fragment slot="did">Cut the tutorial. Make the text bigger, and let big high-contrast buttons do the explaining instead.</Fragment>
-  <Fragment slot="rejected">Rewriting the copy in simpler words. The reading level wasn't the issue. Nobody was reading it at all.</Fragment>
-  <Fragment slot="cost">Anything that genuinely needs words now has nowhere to go. The privacy and legal copy is still sitting on the acknowledgement screen, still getting skipped.</Fragment>
+<Decision num="02" title="We built an onboarding tutorial, then decided to remove it">
+  <Fragment slot="finding">Every participant skipped the instructions, in both rounds of testing. Younger kids didn't notice the small body text. Older kids tried to read it and said it was too small.</Fragment>
+  <Fragment slot="did">Remove the tutorial. Make the text bigger, and let big high-contrast buttons do the explaining instead.</Fragment>
+  <Fragment slot="rejected">Rewriting the copy in simpler words. Reading level wasn't the issue, since the text wasn't being read.</Fragment>
+  <Fragment slot="cost">Anything that truly needs words now has less room. The privacy and legal copy still lives on the acknowledgement screen, and it's still being skipped.</Fragment>
 </Decision>
 
-<Decision num="03" title="The sticker set came from the gallery, not from us">
-  <Fragment slot="finding">Planets 18.4%, stars 15.4%, rockets 12.4%. Kids had already told us what they wanted to draw by drawing it badly with a one-pixel pen.</Fragment>
-  <Fragment slot="did">Build those three first, and make them movable objects rather than stamps, so you can put one down and still change your mind.</Fragment>
-  <Fragment slot="rejected">A big general sticker library with animals and faces and objects.</Fragment>
-  <Fragment slot="cost">If you want to draw something that isn't about space, you get noticeably less help. That's a real narrowing and we did it on purpose.</Fragment>
+<Decision num="03" title="The sticker set came from the gallery">
+  <Fragment slot="finding">Planets 18.4%, stars 15.4%, rockets 12.4%. Kids had already shown us what they wanted to draw, using nothing more than a thin pen.</Fragment>
+  <Fragment slot="did">Build those three first, and make them movable objects rather than stamps, so you can place one and still change your mind.</Fragment>
+  <Fragment slot="rejected">A large general sticker library with animals, faces and objects.</Fragment>
+  <Fragment slot="cost">If you want to draw something that isn't about space, you get noticeably less help. We made that trade-off on purpose.</Fragment>
 </Decision>
 
-<Decision num="04" title="The trash can meant delete">
-  <Fragment slot="finding">We used a trash can for "Restart". Participant 2 called it out without being asked. Participant 3 looked back and forth between "Background" and "Restart" before guessing. The pan tool baffled Participant 1, and the prompt shuffle button confused both six-year-olds and the eight-year-old.</Fragment>
-  <Fragment slot="did">Rename it "Clear", redraw the icon, and pull the pan tool out of the toolbar entirely.</Fragment>
+<Decision num="04" title="A trash can icon read as delete">
+  <Fragment slot="finding">We used a trash can for "Restart". Participant 2 pointed it out without being asked. Participant 3 looked back and forth between "Background" and "Restart" before choosing. The pan tool confused Participant 1, and the prompt shuffle button confused both six-year-olds and the eight-year-old.</Fragment>
+  <Fragment slot="did">Rename it "Clear", redraw the icon, and take the pan tool out of the toolbar.</Fragment>
   <Fragment slot="rejected">Keeping the icon and adding a tooltip. Kids don't hover, and a kiosk doesn't have a cursor to hover with.</Fragment>
-  <Fragment slot="cost">Clearing still wipes everything and it's still one tap away. We never designed the "are you sure" or the undo that should sit behind it.</Fragment>
+  <Fragment slot="cost">Clearing still wipes everything, and it's still one tap away. We didn't get to designing the confirmation or undo that should sit behind it.</Fragment>
 </Decision>
 
-<Decision num="05" title="We talked the sponsor out of their own survey question">
-  <Fragment slot="finding">The sponsor wanted a standard NPS question: "How likely are you to recommend this program to a friend?" In testing, two participants skipped the survey entirely and a third picked the happiest emoji for no reason related to the question.</Fragment>
-  <Fragment slot="did">Swap it for "Did this app make you more excited about space?" Yes or no, two thumbs.</Fragment>
-  <Fragment slot="rejected">Keeping NPS with easier wording. A scale question a kid answers at random is worse than no data, because it still looks like data.</Fragment>
-  <Fragment slot="cost">The sponsor loses a number they could compare against other programs, and gains one that only means anything inside this one. We argued a real yes beats a made-up 8 out of 10.</Fragment>
+<Decision num="05" title="We proposed a different survey question to the sponsor">
+  <Fragment slot="finding">The sponsor's survey used a standard NPS question: "How likely are you to recommend this program to a friend?" In testing, two participants skipped the survey entirely and a third chose the happiest emoji for reasons unrelated to the question.</Fragment>
+  <Fragment slot="did">Suggest "Did this app make you more excited about space?" instead. Yes or no, two thumbs. The sponsor agreed.</Fragment>
+  <Fragment slot="rejected">Keeping NPS with easier wording. A scale question a kid answers at random can be worse than no data, because it still looks like data.</Fragment>
+  <Fragment slot="cost">The sponsor gives up a number they could compare across programs, in exchange for one that's meaningful within this one. Our case was that a real yes tells you more than an 8 out of 10 picked at random.</Fragment>
 </Decision>
 
 <div class="phones">
@@ -113,50 +113,50 @@ Every feature here traces back to something we found. So does everything we gave
   </figure>
   <figure style="flex:1 1 320px;margin:0">
     <div class="shot"><img src="/images/postcards/user-flow.webp" alt="Revised user flow from landing page through prompts, background template, canvas, submission, animation and email delivery" loading="lazy" decoding="async" /></div>
-    <figcaption><b>The new flow.</b> Pink means new. Four of the five new steps happen before the canvas, which is where the problem actually was.</figcaption>
+    <figcaption><b>The new flow.</b> Pink means new. Four of the five new steps happen before the canvas, which is where the research pointed us.</figcaption>
   </figure>
 </div>
 
-## Nobody noticed it was about space
+## The space theme wasn't coming through
 
-The most awkward finding from round one had nothing to do with tools. Three of four kids either didn't pick up that this was about space, or thought it should be way more obvious. Participant 4 put it best: it needed *"more rocket and stuff, like everywhere, so you know it's about space."*
+One of the most surprising findings from round one had nothing to do with tools. Three of four kids either didn't pick up that this was about space, or felt it should be much more obvious. Participant 4 put it best: it needed *"more rocket and stuff, like everywhere, so you know it's about space."*
 
-Which is a strange problem for a product whose entire pitch is that your drawing goes on a rocket. The pitch was in the copy. The copy was the part nobody read.
+That surprised us, for a product built around sending your drawing on a rocket. Then it connected with what we'd already seen in testing: the space story lived in the copy, and the copy was the part kids were skipping.
 
-At Engineering Discovery Days we set the prototype up on a touchscreen next to iPads running the current site, and handed out sticky notes. Over a hundred came back. Send-to-space was the most loved thing in the whole design. Pre-made backgrounds came second, with a few kids saying it helped when they weren't confident drawing. The fill tool was the most asked-for missing feature, named four separate times.
+At Engineering Discovery Days we set the prototype up on a touchscreen next to iPads running the current site, and handed out sticky notes. Over a hundred came back. Send-to-space was the most loved part of the whole design. Pre-made backgrounds came second, with a few kids saying they helped when they weren't confident drawing. The fill tool was the most requested missing feature, named four separate times.
 
-**We didn't count the booth as solving the space problem, though.** It's an engineering fair. Everyone there already likes rockets. The thing still had to work in a quiet museum with nobody standing next to it, so we wrote that down and left the problem open.
+**We were careful not to count the booth as solving the space problem, though.** Kids at an engineering fair are already excited about rockets, and the design still needed to work in a quiet museum with nobody there to explain it. So we noted that and kept the question open.
 
-What actually closed it was throwing out the confirmation screen. Version one was a wall of mission stats and crew bios sitting on top of the survey. It solved nothing, and it created a new problem: mission data changes depending on when you submit, so it needed a live database the sponsor didn't want to run.
+The answer came from rethinking the confirmation screen. Our first version was a dense page of mission stats and crew bios above the survey. It didn't help with the theme, and it added a new problem: mission data changes depending on when you submit, so it needed a live database the sponsor didn't want to maintain.
 
-We pitched an animated launch instead, mocked up as still frames. Your postcard rides through liftoff, stage separation, fairing jettison, landing burn. No words, works for a six-year-old, no database.
+We proposed an animated launch instead, mocked up as still frames. Your postcard rides through liftoff, stage separation, fairing jettison and landing burn. No words, works for a six-year-old, and no database.
 
-Round three, with kids coming back from earlier sessions, the reaction was instant.
+In round three, with kids returning from earlier sessions, the reaction was immediate.
 
 <Pull attr="A returning participant, seeing the launch animation for the first time">
   WOW this is super cool.
 </Pull>
 
-They told us they felt more connected to space than they had with the earlier version. Twelve seconds of motion did what three rounds of copy couldn't.
+They told us they felt more connected to space than they had with the earlier version. A short animation got across what the copy hadn't, and it was exciting to see the research lead somewhere that clear.
 
 <div class="phones">
   <figure style="flex:1 1 300px;margin:0">
     <div class="shot"><img src="/images/postcards/confirm-crew.webp" alt="The first confirmation screen design, dense with mission statistics and crew photographs" loading="lazy" decoding="async" /></div>
-    <figcaption><b>What we cut.</b> Mission stats and crew bios. All true, all text, and all dependent on live flight data for every single submission.</figcaption>
+    <figcaption><b>What we set aside.</b> Mission stats and crew bios. Accurate, text-heavy, and dependent on live flight data for every submission.</figcaption>
   </figure>
   <figure style="flex:1 1 300px;margin:0">
     <div class="shot"><img src="/images/postcards/animation.webp" alt="Static frames of the launch animation showing the postcard travelling through each stage of the flight profile" loading="lazy" decoding="async" /></div>
-    <figcaption><b>What replaced it.</b> The launch sequence, mocked up as frames. Same information, no reading, no database.</figcaption>
+    <figcaption><b>What replaced it.</b> The launch sequence, mocked up as frames. The same story, no reading, no database.</figcaption>
   </figure>
 </div>
 
-## Giving museums a reason to care
+## Giving museums a reason to partner
 
-The other half of the brief was institutional. Museums and science centres had no way to brand or customise any of this, which made it a weak thing to partner on.
+The other half of the brief was institutional. Museums and science centres had no way to brand or customise any of this, which made partnering less appealing.
 
 We built co-branding around one link per partner. The link sets the branding and tracks which submissions came from that location. A partner sends a logo, an optional custom prompt, and any extra artwork, and it shows up in four places: next to the Club for the Future mark during onboarding, as the first suggested background, as the first sticker in the tray, and on the canvas itself.
 
-That last one is the bit I like. Our first attempt laid the logo flat across the artboard with a white outline so it stayed readable, and it looked exactly like a watermark on a child's drawing. Turning it into a postage stamp fixed both problems at once. It stays visible, which is what the partner is paying for, and it stops fighting the artwork, because a stamp in the corner of a postcard is just where a stamp goes.
+That last one is my favourite part. Our first attempt laid the logo flat across the artboard with a white outline so it stayed readable, and it looked like a watermark on a child's drawing. Turning it into a postage stamp solved both problems at once. It stays visible, which matters to the partner, and it no longer competes with the artwork, because a stamp in the corner of a postcard is right where a stamp belongs.
 
 <Figure src="/images/postcards/cobrand-stamp.webp" alt="Canvas showing the partner logo rendered as a postage stamp in the upper right corner of the artboard" lead="Partner branding as a stamp.">
   Always visible, can't be drawn over, and it looks like it belongs there.
@@ -164,9 +164,9 @@ That last one is the bit I like. Our first attempt laid the logo flat across the
 
 ## Three screen sizes, one set of variables
 
-The sponsor handed us seven breakpoints and said they'd handle the rest in build. We did three: kiosk at 1920 by 1080 because that's what stands in the museum, desktop and tablet because that's what you'd use at home, and mobile because it's the only vertical one and therefore the awkward one.
+The sponsor shared seven breakpoints and planned to handle the rest in build. We designed three: kiosk at 1920 by 1080 because that's what stands in the museum, desktop and tablet because that's what you'd use at home, and mobile because it's the only vertical layout and needed the most rethinking.
 
-Instead of making three copies of every component, we put font sizes, padding, margins and dimensions into Figma as numeric variables and set each breakpoint up as a mode. Switch the mode and everything resizes at once. Faster to work with, and much easier for whoever builds it to read.
+Instead of making three copies of every component, we put font sizes, padding, margins and dimensions into Figma as numeric variables and set each breakpoint up as a mode. Switch the mode and everything resizes at once. It was faster to work with, and much easier for whoever builds it to read.
 
 <figure>
   <div class="phones">
@@ -177,18 +177,18 @@ Instead of making three copies of every component, we put font sizes, padding, m
 </figure>
 
 <div class="caveat">
-  <h2 style="margin-block-start:0">What I don't trust about this research</h2>
+  <h2 style="margin-block-start:0">What I'd be careful with in this research</h2>
   <ul>
-    <li><b>Round one was four kids we found through people we know.</b> Ages six to twelve, no prior exposure, consent sorted. It caught real problems and I'd run it again, but four kids recruited that way is a signal, not a sample, and I wouldn't present it as one.</li>
-    <li><b>Engineering Discovery Days is a friendly room.</b> Kids at an engineering fair are primed to love rockets. We got great volume and clear direction out of it, and it told us less about whether the space theme landed than the enthusiasm suggested. We said so in the report instead of banking the win.</li>
-    <li><b>Two of our gallery categories were fuzzy.</b> "Colouring inside a shape" and "trying to blend colours" were genuinely hard for four people to judge the same way. The headline numbers hold up. Those two I'd call approximate.</li>
-    <li><b>None of this measures the actual goal.</b> The programme exists to get kids interested in STEM and aerospace careers. We measured one session at a kiosk. Whether any of it survives the walk out of the museum is the question I'd want to answer next, and ten weeks was never going to get there.</li>
+    <li><b>Round one was four kids we found through people we know.</b> Ages six to twelve, no prior exposure, consent sorted. It caught real problems and I'd run it again, but four kids recruited that way is a signal rather than a sample, and I'd present it that way.</li>
+    <li><b>Engineering Discovery Days is a friendly room.</b> Kids at an engineering fair are primed to love rockets. We got great volume and clear direction from it, but it told us less about whether the space theme landed than the enthusiasm might suggest. We noted that in the report.</li>
+    <li><b>Two of our gallery categories were hard to pin down.</b> "Colouring inside a shape" and "trying to blend colours" were difficult for four people to code consistently. The headline numbers hold up. Those two I'd call approximate.</li>
+    <li><b>None of this measures the program's bigger goal.</b> The program exists to get kids interested in STEM and aerospace careers, and we measured one session at a kiosk. Whether that interest lasts beyond the museum visit is the question I'd most like to explore next, and it was beyond what ten weeks could answer.</li>
   </ul>
 </div>
 
 ## Who did what
 
-Four of us, with the project management rotating by milestone. Being specific about this seems better than claiming the whole thing.
+Four of us, with project management rotating by milestone. Here's how the work was shared.
 
 <dl class="roles">
   <dt class="me">Christian Chung</dt>
@@ -203,4 +203,4 @@ Four of us, with the project management rotating by milestone. Being specific ab
 
 **What we handed over:** a high-fidelity Figma prototype in basic and co-branded versions, across kiosk, desktop, tablet and mobile, for Club for the Future to build from. Every major feature traces back to something we found or something we tested. None of it has shipped to the public platform.
 
-**What I'd do differently:** run the gallery analysis before the expert interviews instead of alongside them. That 12.9% was the best thing we had and we found it in week three. If we'd walked into the Yip and Kientz conversations already holding it, we could have spent that time on the drop-off problem instead of on narrowing the age range, which honestly the research papers could have told us.
+**What I'd do differently:** run the gallery analysis before the expert interviews instead of alongside them. That 12.9% turned out to be our most useful finding, and we found it in week three. If we'd gone into the conversations with Yip and Kientz already holding it, we could have spent that time on why kids were leaving, rather than on narrowing the age range, which existing research could have helped us with.

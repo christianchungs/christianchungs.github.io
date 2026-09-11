@@ -12,7 +12,7 @@ const work = (await getCollection('work', ({ data }) => !data.draft))
     <h1>Work</h1>
     <p class="lede">
       {work.length} project{work.length === 1 ? '' : 's'}. Case studies cover the
-      problem, the decisions, and what shipped.
+      problem, the decisions, and what we learned.
     </p>
     <div class="grid">
       {work.map((entry, i) => <ProjectCard entry={entry} index={i} />)}
