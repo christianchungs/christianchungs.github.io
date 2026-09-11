@@ -22,6 +22,11 @@ const work = defineCollection({
       discipline: z.array(z.string()).default([]),  // used for filtering later
       cover: image().optional(),
       coverAlt: z.string().optional(),
+      /* Card image for the work index. A path under /public, e.g.
+         "/images/hinge/outcomes.webp". Use this rather than `cover` when the
+         image is a shared asset instead of a file sitting next to the .mdx. */
+      card: z.string().optional(),
+      cardAlt: z.string().optional(),
       featured: z.boolean().default(false),
       order: z.number().default(999),               // lower = earlier in the list
       draft: z.boolean().default(false),            // true = never published

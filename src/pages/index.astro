@@ -1,50 +1,107 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 
 const work = (await getCollection('work', ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order);
-const featured = work.filter((w) => w.data.featured).slice(0, 3);
-const shown = featured.length ? featured : work.slice(0, 3);
+
+/* How many slots the work index shows in total. Anything past the real case
+   studies renders as "Coming soon...". Drop this to work.length once the third
+   project exists. */
+const SLOTS = 3;
+const placeholders = Math.max(0, SLOTS - work.length);
+
+const capabilities = [
+  { label: 'Artifact research', title: 'Reading what people already made',
+    body: '429 real postcards, coded by hand into patterns and themes. The percentages that came out of that became the shopping list for what to build.' },
+  { label: 'Testing with people', title: "Sessions with users who won't file a bug report",
+    body: 'Kids aged six to twelve, and adults on dating apps. Moderating, notetaking, consent, task design, and reading what people do instead of what they say.' },
+  { label: 'Problem framing', title: 'Working out who the user actually is',
+    body: 'Two expert interviews took a vague brief that said "K-12" and turned it into an age range we could design for and test against.' },
+  { label: 'Interface systems', title: 'One design, three screen sizes',
+    body: 'Breakpoints driven by Figma variable modes instead of three copies of every component, so a change lands everywhere at once.' },
+  { label: 'Working with stakeholders', title: 'Keeping a sponsor and an eight-year-old happy at the same time',
+    body: 'Weekly sponsor reviews, and a partner branding system that gives museums something visible without taking the screen away from the kid drawing on it.' },
+  { label: 'Honest reporting', title: "Saying which numbers I'd actually trust",
+    body: 'Small samples and friendly crowds are worth flagging. Both case studies have a section on what I don’t trust about my own research.' },
+];
 ---
 
-<BaseLayout title="Chung — Multidisciplinary Designer">
+<BaseLayout title="Chung — Product Designer">
   <section class="page hero">
-    <!-- PLACEHOLDER COPY — replace with your real positioning statement. -->
-    <p class="eyebrow">Multidisciplinary designer</p>
-    <h1 class="hero__line">
-      I design products that feel considered, not decorated.
-    </h1>
-    <p class="hero__sub">
-      Currently looking for Product Design and UX roles. Previously
-      [placeholder — where you've worked or studied].
+    <p class="hero-claim">
+      Almost <span class="stamp">13%</span> of kids' postcards to space were showing up blank. I found out why.
+      Ten out of ten people failed the same task in Hinge's signup, and I got to watch every one of them.
+      I test with six-year-olds, who cheerfully ignore every word we write.{' '}
+      <span class="quiet">Product designer at UW Human Centered Design &amp; Engineering.</span>
     </p>
+    <div class="chips">
+      <span class="chip">Seattle, WA</span>
+      <span class="chip">UW HCDE</span>
+      <span class="chip">Looking for product design roles</span>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="page section" id="work">
+    <p class="eyebrow">Selected work</p>
+
+    {work.map((entry, i) => (
+      <>
+        {i > 0 && <hr class="rule rule--gap" />}
+        <a class="work-feature" href={`/work/${entry.id}/`}>
+          <div class="wf-top">
+            <span class="eyebrow">{entry.data.year}</span>
+            <span class="eyebrow">{entry.data.client}</span>
+          </div>
+          <h2 class="wf-title">{entry.data.title}</h2>
+          <p class="wf-sub">{entry.data.summary}</p>
+          {entry.data.card && (
+            <div class="wf-shot">
+              <img src={entry.data.card} alt={entry.data.cardAlt ?? ''}
+                   loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+            </div>
+          )}
+          <span class="wf-go"><span>Read the case study</span><span class="arrow">&rarr;</span></span>
+        </a>
+      </>
+    ))}
+
+    {placeholders > 0 && (
+      <div class="soon-list">
+        {Array.from({ length: placeholders }).map(() => (
+          <div class="soon">
+            <h3>Coming soon...</h3>
+            <span class="eyebrow">In progress</span>
+          </div>
+        ))}
+      </div>
+    )}
   </section>
 
   <section class="page section">
-    <div class="section__head">
-      <h2>Selected work</h2>
-      <a class="section__all" href="/work/">All projects →</a>
+    <div class="cap-head">
+      <h2>What I do on a project</h2>
+      <p class="cap-lede">All of this comes from the two projects above.</p>
     </div>
-    <div class="grid">
-      {shown.map((entry, i) => <ProjectCard entry={entry} index={i} />)}
+    <div class="cap-grid">
+      {capabilities.map((c) => (
+        <div class="cap">
+          <span class="eyebrow">{c.label}</span>
+          <h3>{c.title}</h3>
+          <p>{c.body}</p>
+        </div>
+      ))}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .hero { padding-block: var(--space-3xl) var(--space-2xl); display: grid; gap: var(--space-m); }
-  .hero__line { max-width: 18ch; }
-  .hero__sub { font-size: var(--step-1); color: var(--color-text-muted); max-width: 48ch; }
-  .section__head {
-    display: flex; align-items: baseline; justify-content: space-between;
-    gap: var(--space-m); padding-block-end: var(--space-l);
-    border-bottom: 1px solid var(--color-border); margin-block-end: var(--space-l);
-  }
-  .section__all { font-family: var(--font-mono); font-size: var(--step--1); text-decoration: none; }
-  .grid {
-    display: grid; gap: var(--space-xl);
-    grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
-  }
+  .hero { padding-block: clamp(3.5rem, 9vw, 7rem) clamp(2.75rem, 6vw, 4.5rem); }
+  .rule { border: 0; border-top: 1px solid var(--color-border); margin: 0; }
+  .rule--gap { margin-block: clamp(2.75rem, 5vw, 4.25rem); }
+  .soon-list { margin-block-start: clamp(2.5rem, 5vw, 4rem); }
+  .cap-head { display: grid; gap: var(--space-xs); margin-block-end: var(--space-l); }
+  .cap-lede { color: var(--color-text-muted); font-size: var(--step-1); max-width: var(--measure); }
 </style>

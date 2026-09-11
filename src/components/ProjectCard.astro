@@ -4,7 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props { entry: CollectionEntry<'work'>; index?: number; }
 const { entry, index = 0 } = Astro.props;
-const { title, summary, year, role, cover, coverAlt, externalUrl } = entry.data;
+const { title, summary, year, role, cover, coverAlt, card, cardAlt, externalUrl } = entry.data;
 const href = externalUrl ?? `/work/${entry.id}/`;
 ---
 
@@ -13,6 +13,8 @@ const href = externalUrl ?? `/work/${entry.id}/`;
     <div class="card__media">
       {cover
         ? <Image src={cover} alt={coverAlt ?? ''} widths={[400, 800, 1200]} sizes="(max-width: 760px) 100vw, 50vw" />
+        : card
+        ? <img src={card} alt={cardAlt ?? ''} loading="lazy" decoding="async" />
         : <div class="card__placeholder" aria-hidden="true"><span>Cover image</span></div>}
     </div>
     <div class="card__body">

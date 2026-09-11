@@ -1,5 +1,4 @@
 ---
-import ThemeToggle from './islands/ThemeToggle';
 const path = Astro.url.pathname;
 const links = [
   { href: '/work/', label: 'Work' },
@@ -24,7 +23,6 @@ const isActive = (href: string) => path === href || path.startsWith(href);
         ))}
       </ul>
     </nav>
-    <ThemeToggle client:load />
     </div>
   </div>
 </header>
@@ -67,16 +65,4 @@ const isActive = (href: string) => path === href || path.startsWith(href);
   .nav__list a:hover,
   .nav__list a[aria-current='page'] { color: var(--color-text); }
 
-  :global(.theme-toggle) {
-    background: none;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    width: 2rem; height: 2rem;
-    display: grid; place-items: center;
-    cursor: pointer;
-    color: var(--color-text-muted);
-    transition: color var(--dur-fast) var(--ease-out),
-                border-color var(--dur-fast) var(--ease-out);
-  }
-  :global(.theme-toggle:hover) { color: var(--color-text); border-color: var(--color-text-muted); }
 </style>

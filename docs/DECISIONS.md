@@ -47,3 +47,40 @@ for content.
 **Why:** Chung sees the shape immediately and can work on identity in parallel.
 **Watch for:** the classic failure mode is a site that stays 80% lorem ipsum. Phase 2
 exists to close this.
+
+### 2026-09-11 — Satoshi is the only typeface, including labels
+**Decision:** `--font-display`, `--font-body` and `--font-mono` all resolve to
+Satoshi. No second family anywhere on the site.
+**Why:** Chung asked for it directly, and it makes the page self-contained: with the
+five faces in `public/fonts/` the site now makes zero external font requests.
+**Cost accepted:** a mono face signals "label" through its shape; Satoshi does not.
+Small caps labels therefore carry `font-weight: 700` and `--tracking-wide: 0.13em`
+to do that job. Lower either and chips, eyebrows and table terms read as
+undersized body copy.
+**Also:** Satoshi ships no 600 and no 800 weight. The `@font-face` blocks use
+weight *ranges* so those map onto real faces instead of synthesised ones.
+
+### 2026-09-11 — Dark mode is strictly greyscale
+**Decision:** Every neutral in the dark theme is R=G=B. The accent is the only
+chromatic value in it.
+**Why:** the first version tinted the dark neutrals toward the accent hue
+(`#0D1017`, `#151A23`) and Chung read the whole theme as blue. Neutralising only
+the page background would have left the text greys and hairlines still cool.
+**Do not** re-tint these when adjusting the palette.
+
+### 2026-09-11 — The theme toggle is a light switch, and it lives in BaseLayout
+**Decision:** The toggle renders a photorealistic wall switch in pure CSS, fixed
+bottom-right, mounted once in `BaseLayout.astro` rather than inside `Nav.astro`.
+**Why:** Chung asked for the switch. It cannot live in the nav because the nav sets
+`backdrop-filter`, which makes it a containing block for `position: fixed`
+descendants — the switch would pin inside the header instead of the viewport.
+**Note:** its CSS is in `global.css`, not a scoped `.astro` block, because scoped
+styles do not reach a React island.
+
+### 2026-09-11 — Case studies are MDX in the work collection, not bespoke pages
+**Decision:** Each case study is one `.mdx` file using four small components
+(`Decision`, `StatRow`, `Pull`, `Figure`) from `src/components/case/`.
+**Why:** Chung does not code. Prose stays editable in a file that is 90% plain
+markdown, and the repetitive markup is behind named props and slots.
+**Rules out:** hand-written `.astro` pages per project, which would have put the
+copy inside markup he can't safely edit.

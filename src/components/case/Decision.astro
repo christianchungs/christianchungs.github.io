@@ -1,0 +1,30 @@
+---
+/* One block in a decision chain. Use it like this inside an .mdx case study:
+
+   <Decision num="01" title="What you decided">
+     <Fragment slot="finding">What you found, with the number.</Fragment>
+     <Fragment slot="did">The call you made.</Fragment>
+     <Fragment slot="rejected">What you turned down.</Fragment>
+     <Fragment slot="cost">What it cost you.</Fragment>
+   </Decision>
+
+   `didLabel` and `costLabel` let a research write-up relabel the two middle
+   rows (e.g. "Recommended" and "The catch") without a second component. */
+interface Props {
+  num: string;
+  title: string;
+  didLabel?: string;
+  costLabel?: string;
+}
+const { num, title, didLabel = 'Decision', costLabel = 'Cost' } = Astro.props;
+---
+
+<div class="dec">
+  <div class="dec-hd"><span class="num">{num}</span><h3>{title}</h3></div>
+  <dl class="dec-body">
+    <dt>Finding</dt><dd><slot name="finding" /></dd>
+    <dt class="hi">{didLabel}</dt><dd class="hi"><slot name="did" /></dd>
+    <dt>Rejected</dt><dd><slot name="rejected" /></dd>
+    <dt>{costLabel}</dt><dd><slot name="cost" /></dd>
+  </dl>
+</div>

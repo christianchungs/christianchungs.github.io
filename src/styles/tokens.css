@@ -4,28 +4,50 @@
    here and it changes everywhere. You never need to touch another CSS file
    to reskin the site.
 
-   HOW TO USE: replace the placeholder values below with your real design
-   system. Keep the variable NAMES the same; change only what's after the colon.
+   Filled in 2026-09-11 from the approved mockup. The reasoning behind every
+   value lives in the project doc `claude/phase-1-answers.md`.
    =========================================================================== */
+
+/* --- TYPEFACE ------------------------------------------------------------- */
+/* Satoshi is self-hosted from /public/fonts/. It is the ONLY typeface on the
+   site: display, body and small caps labels all use it.
+
+   Satoshi has no 600 and no 800 weight. The ranges below map those onto the
+   nearest real face so the browser never invents a fake semibold. Keep the
+   ranges if you add faces.                                                  */
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Regular.woff2') format('woff2');
+             font-weight: 400;     font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Italic.woff2')  format('woff2');
+             font-weight: 400;     font-style: italic; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Medium.woff2')  format('woff2');
+             font-weight: 500 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Bold.woff2')    format('woff2');
+             font-weight: 700 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Black.woff2')   format('woff2');
+             font-weight: 900;     font-style: normal; font-display: swap; }
 
 :root {
   /* --- COLOR ------------------------------------------------------------ */
-  /* Placeholder neutral palette. Swap for your identity. */
-  --color-bg:            #fbfbf9;
-  --color-bg-subtle:     #f2f1ed;
+  /* Light theme is white, with neutrals biased very slightly cool toward the
+     accent. The accent is Chung's own blue.                                 */
+  --color-bg:            #ffffff;
+  --color-bg-subtle:     #f4f6fa;
   --color-surface:       #ffffff;
-  --color-border:        #e4e2dc;
-  --color-text:          #16150f;
-  --color-text-muted:    #6b6960;
-  --color-accent:        #2f4fff;
+  --color-border:        #e4e7ee;
+  --color-border-strong: #cbd2e0;   /* hairlines that need to be seen */
+  --color-text:          #14171d;
+  --color-text-muted:    #4a5261;
+  --color-text-subtle:   #7c8598;   /* captions, small caps labels */
+  --color-accent:        #304c7e;
   --color-accent-text:   #ffffff;
-  --color-focus:         #2f4fff;
+  --color-focus:         #304c7e;
 
   /* --- TYPE ------------------------------------------------------------- */
-  /* Swap these two lines for your real typefaces. */
-  --font-display: ui-serif, Georgia, 'Times New Roman', serif;
-  --font-body:    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono:    ui-monospace, 'SFMono-Regular', 'Cascadia Code', monospace;
+  --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-body:    var(--font-display);
+  /* Not actually monospace. Small caps labels are Satoshi too, and they need
+     weight 700 plus wide tracking to still read as labels. See global.css. */
+  --font-mono:    var(--font-display);
 
   /* Fluid type scale — grows with viewport, no media queries needed. */
   --step--1: clamp(0.83rem, 0.80rem + 0.14vw, 0.91rem);
@@ -38,10 +60,10 @@
 
   --leading-tight: 1.1;
   --leading-snug:  1.3;
-  --leading-body:  1.6;
+  --leading-body:  1.65;
 
-  --tracking-tight: -0.02em;
-  --tracking-wide:   0.08em;
+  --tracking-tight: -0.03em;
+  --tracking-wide:   0.13em;   /* small caps labels; do not reduce */
 
   /* --- SPACE ------------------------------------------------------------ */
   --space-3xs: 0.25rem;
@@ -55,55 +77,67 @@
   --space-3xl: 9rem;
 
   /* --- LAYOUT ----------------------------------------------------------- */
-  --measure:      68ch;   /* max reading width for body copy */
-  --width-page:   1200px;
+  --measure:      68ch;
+  --width-page:   1180px;
   --width-narrow: 760px;
   --gutter:       clamp(1.25rem, 4vw, 3rem);
 
   /* --- SHAPE & DEPTH ---------------------------------------------------- */
-  --radius-s: 4px;
-  --radius-m: 10px;
-  --radius-l: 20px;
+  /* Sharp. Effectively square everywhere. */
+  --radius-s: 2px;
+  --radius-m: 3px;
+  --radius-l: 4px;
   --radius-full: 999px;
 
-  --shadow-s: 0 1px 2px rgb(0 0 0 / 0.05);
-  --shadow-m: 0 4px 16px -4px rgb(0 0 0 / 0.10);
-  --shadow-l: 0 24px 48px -16px rgb(0 0 0 / 0.18);
+  --shadow-s: 0 1px 2px rgb(20 23 29 / 0.05);
+  --shadow-m: 0 1px 2px rgb(20 23 29 / 0.05), 0 12px 32px -18px rgb(20 23 29 / 0.28);
+  --shadow-l: 0 2px 4px rgb(20 23 29 / 0.06), 0 18px 40px -20px rgb(20 23 29 / 0.42);
 
   /* --- MOTION ----------------------------------------------------------- */
-  /* Interactive components read these so all motion feels like one system. */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.2, 1.5, 0.45, 1);
 
   --dur-fast:   150ms;
-  --dur-base:   280ms;
-  --dur-slow:   520ms;
+  --dur-base:   260ms;
+  --dur-slow:   420ms;
 }
 
-/* Dark mode. Delete this block if you want a light-only site. */
+/* Dark mode is strictly greyscale. Every neutral below is R = G = B, so the
+   accent is the only colour in the theme. An earlier version tinted these
+   toward the accent and the whole thing read as blue. Do not re-tint. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-bg:         #0e0e0c;
-    --color-bg-subtle:  #171715;
-    --color-surface:    #1c1c19;
-    --color-border:     #2e2e2a;
-    --color-text:       #f4f3ee;
-    --color-text-muted: #9a978d;
-    --color-accent:     #8aa0ff;
-    --color-accent-text:#0e0e0c;
-    --color-focus:      #8aa0ff;
+    --color-bg:            #101010;
+    --color-bg-subtle:     #202020;
+    --color-surface:       #191919;
+    --color-border:        #2a2a2a;
+    --color-border-strong: #3b3b3b;
+    --color-text:          #f1f1f1;
+    --color-text-muted:    #ababab;
+    --color-text-subtle:   #7e7e7e;
+    --color-accent:        #8fafe0;
+    --color-accent-text:   #101010;
+    --color-focus:         #8fafe0;
+
+    --shadow-m: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 34px -18px rgb(0 0 0 / 0.75);
+    --shadow-l: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -20px rgb(0 0 0 / 0.8);
   }
 }
 
 :root[data-theme='dark'] {
-  --color-bg:         #0e0e0c;
-  --color-bg-subtle:  #171715;
-  --color-surface:    #1c1c19;
-  --color-border:     #2e2e2a;
-  --color-text:       #f4f3ee;
-  --color-text-muted: #9a978d;
-  --color-accent:     #8aa0ff;
-  --color-accent-text:#0e0e0c;
-  --color-focus:      #8aa0ff;
+  --color-bg:            #101010;
+  --color-bg-subtle:     #202020;
+  --color-surface:       #191919;
+  --color-border:        #2a2a2a;
+  --color-border-strong: #3b3b3b;
+  --color-text:          #f1f1f1;
+  --color-text-muted:    #ababab;
+  --color-text-subtle:   #7e7e7e;
+  --color-accent:        #8fafe0;
+  --color-accent-text:   #101010;
+  --color-focus:         #8fafe0;
+
+  --shadow-m: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 34px -18px rgb(0 0 0 / 0.75);
+  --shadow-l: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -20px rgb(0 0 0 / 0.8);
 }

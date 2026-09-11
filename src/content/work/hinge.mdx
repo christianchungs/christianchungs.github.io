@@ -1,0 +1,188 @@
+---
+title: "Ten people. Ten sessions. One task nobody could finish."
+summary: "Hinge's whole pitch is \"Designed to be Deleted.\" Over ten usability sessions we watched people reach for that word with completely the wrong meaning attached to it."
+year: 2025
+role: "Usability Research, Moderation, Synthesis"
+client: "Hinge, independent study"
+discipline: ['Research', 'Usability Testing']
+featured: true
+order: 2
+card: "/images/hinge/outcomes.webp"
+cardAlt: "Participant outcome grid: five task rows by ten participants, with one row failed by everyone"
+draft: false
+---
+
+import Decision from '../../components/case/Decision.astro';
+import StatRow from '../../components/case/StatRow.astro';
+import Pull from '../../components/case/Pull.astro';
+import Figure from '../../components/case/Figure.astro';
+
+<p class="disclaim"><b>Student project.</b> This was coursework for UW HCDE 417. It isn't affiliated with, sponsored by, or endorsed by Hinge, and nothing here is a statement from the company. The screenshots are of the real app as it worked during testing.</p>
+
+<Figure src="/images/hinge/outcomes.webp" alt="Participant outcome grid: five task rows across ten participants. The Adjusting Onboarding Questions row is marked failed for every participant." lead="Every cell in that second row is a failure." eager={true}>
+  Task outcomes for all ten people, scored against a scale we wrote into the notes template before the first session.
+</Figure>
+
+<StatRow items={[
+  { value: '10',    label: 'Participants, 18 to 29' },
+  { value: '10/10', label: 'Failed to change an answer' },
+  { value: '6/10',  label: "Couldn't find preferences" },
+  { value: '7/10',  label: 'Surprised by the paywall' },
+]} />
+
+## What we tested, and who we bothered
+
+Hinge sells itself on intent. The motto is "Designed to be Deleted," and the idea underneath it is that the app works well enough that you stop needing it. We looked at the part that has to earn that first: signing up, before you've seen a single match.
+
+Ten people, aged 18 to 29, which is where most of the dating app population lives. Eight had never touched Hinge. Two had used it and gone quiet for six months or more, which gave us a useful second angle: people who already knew the conventions.
+
+Sessions ran over Zoom with people sharing their own phone screens, thirty to forty-five minutes each, thinking out loud, one moderator and at least one notetaker every time. You could use your real details or a burner account we set up, depending on how you felt about typing your religion into a dating profile while a stranger watched.
+
+Three tasks. **Sign up and build a profile. Go back and change an answer you already gave. Find and adjust Dating Preferences and Dealbreakers.**
+
+Afterwards we coded every session separately, gave each person their own colour of sticky note, and pushed it all around a Miro board until three findings held together.
+
+<Figure src="/images/hinge/affinity.webp" alt="Affinity diagramming board in Miro showing initial findings clustered into grouped themes and then into a findings outline" lead="Ten sessions, one colour each.">
+  Raw notes on the left, themes in the middle, the findings outline on the right.
+</Figure>
+
+## The good news first
+
+Worth saying up front, because it shapes everything after it: once people found a feature, all ten of them could use it. Questions got answered, toggles got toggled, preferences got adjusted. Nobody fumbled an interaction.
+
+So this isn't a story about a confusing interface. It's a story about not being able to find things, not being able to go back, and not being able to tell what you're allowed to touch.
+
+## Task two failed for everybody
+
+Task two was the simplest thing we asked anyone to do: go back and change an answer you already gave.
+
+**Ten out of ten couldn't.** Not struggled, not took a while. Failed, by the definition we'd written down before the first session: unable to complete the task.
+
+It comes down to one missing button. Hinge's signup runs past twenty questions, one per screen, covering your age, your pronouns, your politics and your religion. None of those screens has a back button. Once an answer is in, it's gone until you finish the whole thing.
+
+That's the finding. It's also the one everything else bends around, because of what it does to the twenty screens either side of it.
+
+<Pull attr="Participant 3">
+  You can't, like, go back and adjust your preferences as you're doing it initially. You have to go through the whole onboarding and then adjust it later, which I think is... a little goofy.
+</Pull>
+
+<div class="phones-sm">
+  <figure>
+    <div class="shot"><img src="/images/hinge/noback.webp" alt="Hinge onboarding pronouns screen; the bottom bar carries only a forward arrow and no way back" loading="lazy" decoding="async" /></div>
+    <figcaption><b>Forward only.</b> The bar at the bottom of every signup screen has a next arrow and nothing else.</figcaption>
+  </figure>
+  <figure>
+    <div class="shot"><img src="/images/hinge/skip.webp" alt="Notification permission dialog with a prominent Enable button and a very faint Not now option below it" loading="lazy" decoding="async" /></div>
+    <figcaption><b>The skip nobody saw.</b> Participant 8 decided there was no way past this and started tapping at random until something worked.</figcaption>
+  </figure>
+</div>
+
+Skipping was a theme of its own. Two people wanted to skip questions and only one of them worked out how. Three didn't realise they had to finish every required question before they could look around at all, which means you have to hand over your politics before you can decide whether you want the app.
+
+## Same word, opposite meaning
+
+Nobody thinks of a missing back button as a missing button. They think of it as being stuck in a form with a mistake they can already see. People described the flow as long and rigid, and a few of them worked out that their only route back to a wrong answer was to blow up the account and start over.
+
+One of them said out loud where that ends.
+
+<Pull attr="Participant 2, after realising they couldn't fix an answer">
+  I'd probably close out the app and restart... I'd probably delete the app.
+</Pull>
+
+**This is the bit I'd lead with in a stakeholder meeting,** and not because it's clever. Hinge's whole brand is that you'll delete the app. It's written on the box. And the strongest reaction we got in ten sessions was someone reaching for that exact word before they'd even finished signing up, meaning the precise opposite of what the company means by it.
+
+That's the difference between a usability nitpick and a business problem. A back button in a linear form isn't hard to build. What it's protecting is the first twenty minutes a future paying customer ever spends with you, at the exact moment they've invested nothing and lose nothing by walking.
+
+## Three findings, and what each fix would cost
+
+None of these are free. Saying so felt more useful than pretending otherwise.
+
+<Decision num="01" title="Signup has no reverse gear" didLabel="Recommended" costLabel="The catch">
+  <Fragment slot="finding">All ten failed the task of changing an answer. Five of ten separately called the flow overwhelming. Four of ten were fed up with pop-ups chopping it into pieces. Two hit bugs that forced them to close and reopen the app mid-signup.</Fragment>
+  <Fragment slot="did">A back control on every signup screen, opposite the next arrow so the bar reads as a pair. Top priority, ten of ten people affected.</Fragment>
+  <Fragment slot="rejected">Leaving it and relying on people editing answers after signup. They can, but they don't know they can, and it doesn't help the mistake they can see right now.</Fragment>
+  <Fragment slot="cost">Signup is a funnel, and every control you add is another way out of it. A back button really does let people leave the screen you want them on. We think that's the cheaper loss when the alternative is them leaving entirely.</Fragment>
+</Decision>
+
+<Decision num="02" title="Dealbreakers are scattered, and the explanation goes unread" didLabel="Recommended" costLabel="The catch">
+  <Fragment slot="finding">Six of ten couldn't find Dating Preferences; it's a small unlabelled icon in the corner. Five of ten couldn't find Dealbreakers, which aren't in one place but tucked inside individual preference screens. Four of ten couldn't say what a Dealbreaker even does. One thought they were tiebreakers for picking between similar profiles.</Fragment>
+  <Fragment slot="did">Put Dealbreakers in one place, turn up the contrast so an active one looks active, and label the preferences icon.</Fragment>
+  <Fragment slot="rejected">Adding more explanatory copy next to the feature, which is the cheap fix and the one that won't work.</Fragment>
+  <Fragment slot="cost">Hinge already explains this. "Dealbreakers will limit who you see and who sees you" is right there on screen, and all four people who misunderstood the feature had it in front of them. If the problem is that nobody reads the words, writing more words won't fix it.</Fragment>
+</Decision>
+
+<Decision num="03" title="You can't tell what's free until you hit the wall" didLabel="Recommended" costLabel="The catch">
+  <Fragment slot="finding">Seven of ten had no idea how much was behind the paywall until they walked into it. Two found out that their dating intention, which they'd picked for free during signup, couldn't be changed afterwards without paying. One found the daily swipe limit by running out, with no counter or warning anywhere.</Fragment>
+  <Fragment slot="did">Flag the settings that will lock later, show a swipe counter before the limit instead of at it, and let people try the premium filters before they choose.</Fragment>
+  <Fragment slot="rejected">Leaving discovery to the paywall itself, which is what happens today.</Fragment>
+  <Fragment slot="cost">Surprise paywalls convert, and warning people costs Hinge the upgrades that come from feeling cornered. Our counter-argument came out of the sessions: people who found a paywall by walking into it described the free app as broken rather than basic. That's a more expensive reputation to have.</Fragment>
+</Decision>
+
+<div class="phones-sm">
+  <figure>
+    <div class="shot"><img src="/images/hinge/prefs-icon.webp" alt="Hinge home screen with the small unlabelled Dating Preferences icon in the top corner highlighted" loading="lazy" decoding="async" /></div>
+    <figcaption><b>Six of ten missed this.</b> Dating Preferences, unlabelled, top corner.</figcaption>
+  </figure>
+  <figure>
+    <div class="shot"><img src="/images/hinge/dealbreaker.webp" alt="Dating Preferences list where only the Age Range row shows a Dealbreaker tag; other rows show padlocks" loading="lazy" decoding="async" /></div>
+    <figcaption><b>One visible Dealbreaker.</b> Age Range has the tag. The rest are hiding inside their own screens.</figcaption>
+  </figure>
+  <figure>
+    <div class="shot"><img src="/images/hinge/paywall.webp" alt="The dating intention onboarding question, answered free during setup" loading="lazy" decoding="async" /></div>
+    <figcaption><b>Free to set, paid to change.</b> You answer this during signup for nothing, then it locks.</figcaption>
+  </figure>
+</div>
+
+Wording tripped people up too. Five weren't sure what some of the terms meant. Two didn't know the difference between monogamy and non-monogamy and one said they'd have Googled it. Two couldn't tell "life partner" from "long-term relationship." Two found it genuinely hard to rate their own politics on a scale with nothing to anchor it against. One skipped the gender identity question entirely rather than answer something they weren't sure of.
+
+## Ranking the fixes instead of just listing them
+
+Twelve recommendations came out of three findings, which is more than anyone is going to do at once. So we ranked them: how many of the ten people actually hit the problem, how badly it blocked a basic task, and how squarely it broke a usability principle. Two came out high, six medium, four low.
+
+That ordering is the part a stakeholder can actually act on. The findings on their own are just a list of complaints.
+
+<Figure src="/images/hinge/priority.webp" alt="Recommendations table ranked from high to low priority, with usability impact and the number of users affected for each" lead="Sorted by who it hurts, not by what's easy.">
+  The back button sits at the top because it's the only one that reached all ten people.
+</Figure>
+
+## Why any of this matters right now
+
+Roughly 3 in 10 US adults have used a dating app, so this is a mainstream thing rather than a niche one. But the trend is going the wrong way. About 1.4 million people walked away from dating apps between 2023 and 2024, and 131,000 of those were Hinge users.
+
+The reason people give is burnout. The apps feel like a chore, or like admin, rather than anything social. Which is exactly what a twenty-question form with no back button feels like.
+
+None of our findings are going to reverse that on their own. But "signing up feels like paperwork" is a solvable version of a problem that otherwise sounds unsolvable, and it's sitting right at the front door.
+
+<div class="caveat">
+  <h2 style="margin-block-start:0">What I don't trust about this study</h2>
+  <ul>
+    <li><b>We couldn't measure the thing we complained about.</b> Our headline finding is that signup is too long, and not every transcript had timestamps, so we can't tell you how long it takes. That's the biggest hole in the report and it was entirely ours to prevent.</li>
+    <li><b>We recruited through our own friends.</b> Most participants knew somebody on the team, which changes how freely people complain. A few also turned up already disliking dating apps, which isn't the same group as people who install one voluntarily.</li>
+    <li><b>The sessions weren't identical.</b> We all kept to the core script but didn't all ask the same follow-ups, and people didn't all get the same signup questions; some got the voice prompt and some didn't. That grid looks tidier than the sessions behind it actually were.</li>
+    <li><b>We changed the recruitment criteria halfway through.</b> Defensible, and it still means the back half of the sample was picked differently from the front half.</li>
+    <li><b>One lapsed user beat everyone, purely because she'd seen it before.</b> A good reminder that most of what we measured is the cost of being new, not the cost of the design. On a study about the new user experience, that distinction matters.</li>
+  </ul>
+</div>
+
+## Who did what
+
+Five of us. Every session had one moderator and at least one notetaker, and both jobs rotated so everyone sat on both sides of the glass. We coded separately first, then argued it out together in Miro.
+
+**[Placeholder]** My specific share of this, in the same detail as the Blue Origin project.
+
+<dl class="roles">
+  <dt class="me">Christian Chung</dt>
+  <dd>[Placeholder] Sessions moderated, sessions noted, findings owned, sections written.</dd>
+  <dt>Angel Torres-Puga</dt>
+  <dd>Researcher. Moderating, notetaking, coding and synthesis.</dd>
+  <dt>Justis Peppin</dt>
+  <dd>Researcher. Moderating, notetaking, coding and synthesis.</dd>
+  <dt>Wenyi Tsai</dt>
+  <dd>Researcher. Moderating, notetaking, coding and synthesis.</dd>
+  <dt>Michelle Nguyen</dt>
+  <dd>Researcher. Moderating, notetaking, coding and synthesis.</dd>
+</dl>
+
+**What we delivered:** a report with three findings, twelve recommendations ranked by priority and reach, task outcomes for every participant, and the affinity board behind all of it. It was coursework. Nothing went to Hinge and nothing here has changed the product.
+
+**What I'd do differently:** draw that outcome grid after session three instead of session ten. The scale was in the notes template from day one, which is the only reason the grid exists, but we only looked at the whole thing at the end. If we'd plotted it early we'd have watched that second row go red by session three, and we could have spent the other seven sessions digging into why people were failing instead of confirming, seven more times, that they were.

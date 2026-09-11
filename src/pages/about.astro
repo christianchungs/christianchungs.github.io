@@ -2,35 +2,35 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="About — Chung">
-  <section class="narrow section stack" style="--flow: var(--space-m)">
-    <h1>About</h1>
-    <!-- PLACEHOLDER — replace all of this with your own words. -->
-    <p class="lede">
-      [Placeholder] One paragraph on how you think about design and what kind of
-      problems you want to work on. Keep it specific — the generic version of
-      this paragraph is the one every portfolio has.
-    </p>
-    <p>
-      [Placeholder] Background: what you studied, what you've made, the range of
-      disciplines you work across and why that combination matters.
-    </p>
-
-    <h2>Capabilities</h2>
-    <ul>
-      <li>[Placeholder] Product design — end to end</li>
-      <li>[Placeholder] Interaction &amp; prototyping</li>
-      <li>[Placeholder] Design systems</li>
-      <li>[Placeholder] Visual identity</li>
-    </ul>
-
-    <h2>Now</h2>
-    <p>[Placeholder] What you're working on and what you're looking for.</p>
+<BaseLayout title="About — Chung" description="Multidisciplinary designer finishing at UW Human Centered Design & Engineering, looking for product and UX design work.">
+  <section class="page section about">
+    <div class="about__text stack" style="--flow: var(--space-m)">
+      <h1>About</h1>
+      <p>Hi, I'm Chung. I'm a multidisciplinary designer finishing up at the University of Washington's Human Centered Design &amp; Engineering program, and I'm looking for product and UX design work.</p>
+      <p>My favourite part of this job happens before anything gets drawn. The Blue Origin project turned on a number nobody had bothered to look at: an eighth of the postcards in the public gallery were completely blank. The background picker, the sticker set, the launch animation, all of it came from chasing that one number instead of working down a feature list.</p>
+      <p>I'm most useful on products where people won't read the instructions, won't report the bug, and won't come back if the first thirty seconds go badly. Which is most products.</p>
+      <p><a href="/work/">See the work &rarr;</a></p>
+    </div>
+    <figure class="about__shot">
+      <div class="shot">
+        <img src="/images/postcards/booth.webp" decoding="async" loading="lazy"
+             alt="The prototype station at UW Engineering Discovery Days, with feedback boards and a Club for the Future banner" />
+      </div>
+      <figcaption>Our booth at UW Engineering Discovery Days, April 2026. Two days of kids telling us exactly what they thought.</figcaption>
+    </figure>
   </section>
 </BaseLayout>
 
 <style>
-  .lede { font-size: var(--step-1); color: var(--color-text-muted); }
-  h2 { margin-block-start: var(--space-xl); font-size: var(--step-2); }
-  ul { padding-inline-start: 1.25em; }
+  .about {
+    display: grid; grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(1.75rem, 5vw, 4rem); align-items: start;
+  }
+  @media (max-width: 860px) { .about { grid-template-columns: 1fr; } }
+  .about__text p { max-width: var(--measure); color: var(--color-text-muted); }
+  .about__shot { margin: 0; }
+  .about__shot figcaption {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step--1); color: var(--color-text-subtle);
+  }
 </style>

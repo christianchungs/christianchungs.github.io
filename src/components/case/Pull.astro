@@ -1,0 +1,10 @@
+---
+/* A pulled quote. <Pull attr="Participant 3">The quote.</Pull> */
+interface Props { attr: string; }
+const { attr } = Astro.props;
+---
+
+<div class="pull">
+  <p><slot /></p>
+  <p class="attr">{attr}</p>
+</div>

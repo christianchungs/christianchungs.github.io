@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import ThemeToggle from '../components/islands/ThemeToggle';
 
 interface Props {
   title: string;
@@ -51,5 +52,6 @@ const socialImage = new URL(ogImage ?? '/images/og-default.png', Astro.site);
     <Nav />
     <main id="main"><slot /></main>
     <Footer />
+    <ThemeToggle client:load />
   </body>
 </html>
