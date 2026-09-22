@@ -246,41 +246,72 @@ function rock(x,z,s,c,rr){const m=mesh(new THREE.DodecahedronGeometry(s,0),c||0x
 
 /* ---------- GYM: the projects ---------- */
 const GX=0, gym=new THREE.Group(); gym.position.x=GX; scene.add(gym);
-const LV=[{y:0,r:[3.0,2.65,3.05]},{y:1.9,r:[2.72,3.3,3.12]},{y:3.5,r:[2.2,3.55,2.62]}];
-const PHI=k=>k*TAU/3, HALF=0.74;
-const R=LV.map((L,l)=>{const o=[];for(let k=0;k<3;k++)for(const s of[-1,1]){const a=PHI(k)+s*HALF+l*0.05;o.push(new THREE.Vector3(Math.sin(a)*L.r[k],L.y,Math.cos(a)*L.r[k]))}return o});
-const Pw=[],Pa=[],Pi=[],Pr=[];
+const PHI=k=>k*TAU/3, D=Math.PI/180;
+// irregular footprint: 8 corners, each level has its own radii and break heights
+const ANG=[0,41,97,139,186,232,281,322].map(a=>a*D);
+const LV=[
+ {y:[0,0,0,0,0,0,0,0],            r:[2.9,3.05,2.6,3.1,2.8,2.45,3.0,2.7], tw:0},
+ {y:[1.55,1.9,2.05,1.7,1.5,1.8,2.1,1.65], r:[3.3,2.7,3.05,3.55,2.55,2.95,3.4,2.75], tw:.05},
+ {y:[3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4],    r:[2.55,2.25,3.5,3.3,2.15,3.15,2.8,2.05], tw:.1}];
+const NV=ANG.length;
+const R=LV.map(l=>ANG.map((a,i)=>{const b=a+l.tw;return new THREE.Vector3(Math.sin(b)*l.r[i],l.y[i],Math.cos(b)*l.r[i])}));
+const PW=[[],[],[]],Pi=[],Pr=[];
 function tri(arr,a,b,c,up,inward){const n=new THREE.Vector3().subVectors(b,a).cross(new THREE.Vector3().subVectors(c,a));
  let ok; if(up) ok=n.y>0; else {const m=a.clone().add(b).add(c);m.y=0;ok=n.dot(m)>0; if(inward) ok=!ok}
  ok?arr.push(a,b,c):arr.push(a,c,b)}
-// outer panels
-for(let l=0;l<2;l++)for(let i=0;i<6;i++){const j=(i+1)%6,arr=i%2?Pa:Pw,a=R[l][i],b=R[l][j],c=R[l+1][j],d=R[l+1][i];tri(arr,a,b,c);tri(arr,a,c,d)}
+// outer panels (three plywood tones)
+for(let l=0;l<2;l++)for(let i=0;i<NV;i++){const j=(i+1)%NV,arr=PW[(i+l)%3],a=R[l][i],b=R[l][j],c=R[l+1][j],d=R[l+1][i];tri(arr,a,b,c);tri(arr,a,c,d)}
 // hollow: inner shell + plywood rim, no lid
 const TH=.14,RI=R.map(ring=>ring.map(v=>{const d=Math.hypot(v.x,v.z);return new THREE.Vector3(v.x*(d-TH)/d,v.y,v.z*(d-TH)/d)}));
-for(let l=0;l<2;l++)for(let i=0;i<6;i++){const j=(i+1)%6,a=RI[l][i],b=RI[l][j],c=RI[l+1][j],d=RI[l+1][i];tri(Pi,a,b,c,false,true);tri(Pi,a,c,d,false,true)}
-for(let i=0;i<6;i++){const j=(i+1)%6,a=R[2][i],b=R[2][j],c=RI[2][j],d=RI[2][i];tri(Pr,a,b,c,true);tri(Pr,a,c,d,true)}
-for(const [arr,c] of [[Pw,0xDCBF90],[Pa,0xCDAB78],[Pi,0xB39062],[Pr,0xE8D3AA]]){const g=new THREE.BufferGeometry().setFromPoints(arr);g.computeVertexNormals();gym.add(mesh(g,c))}
+for(let l=0;l<2;l++)for(let i=0;i<NV;i++){const j=(i+1)%NV,a=RI[l][i],b=RI[l][j],c=RI[l+1][j],d=RI[l+1][i];tri(Pi,a,b,c,false,true);tri(Pi,a,c,d,false,true)}
+for(let i=0;i<NV;i++){const j=(i+1)%NV,a=R[2][i],b=R[2][j],c=RI[2][j],d=RI[2][i];tri(Pr,a,b,c,true);tri(Pr,a,c,d,true)}
+const shell=[];
+for(const [arr,c] of [[PW[0],0xDCBF90],[PW[1],0xD2B182],[PW[2],0xE2C89C],[Pi,0xB39062],[Pr,0xE8D3AA]]){const g=new THREE.BufferGeometry().setFromPoints(arr);g.computeVertexNormals();const m=mesh(g,c);gym.add(m);if(arr!==Pi&&arr!==Pr)shell.push(m)}
+gym.updateMatrixWorld(true);
 
-// point on face i (edge i -> i+1), u across, v up
-function surf(i,u,v){const j=(i+1)%6,l=v<0.5?0:1,t=(v-l*0.5)*2,A0=R[l][i],B0=R[l][j],A1=R[l+1][i],B1=R[l+1][j];
- const b=A0.clone().lerp(B0,u),tp=A1.clone().lerp(B1,u),p=b.clone().lerp(tp,t);
- const du=B0.clone().sub(A0).lerp(B1.clone().sub(A1),t),dv=tp.clone().sub(b);
- const n=du.cross(dv).normalize(),out=A0.clone().add(B0);out.y=0;if(n.dot(out)<0)n.negate();return{p,n}}
+// find the wall surface at a compass angle and height by casting a ray at the boulder
+const wray=new THREE.Raycaster();
+function surf(a,y){const o=new THREE.Vector3(GX+Math.sin(a)*12,y,Math.cos(a)*12),d=new THREE.Vector3(-Math.sin(a),0,-Math.cos(a));
+ wray.set(o,d);const h=wray.intersectObjects(shell,false)[0];if(!h)return null;
+ const n=h.face.normal.clone().transformDirection(h.object.matrixWorld);return{p:h.point.sub(new THREE.Vector3(GX,0,0)),n}}
 
-// holds: fewer, wider, spread evenly over every face
-const HG={jug:new THREE.DodecahedronGeometry(.17,0).scale(1.6,.8,.6),crimp:new THREE.BoxGeometry(.46,.1,.14),sloper:new THREE.IcosahedronGeometry(.2,0).scale(1.7,.75,.42),
- edge:new THREE.BoxGeometry(.62,.12,.16),pinch:new THREE.BoxGeometry(.3,.16,.15),vol:new THREE.TetrahedronGeometry(.6).scale(1.2,1,.5)};
-const PAL=[0x304C7E,0xE0735A,0x6DB59A,0xE3B341,0x8C7BC4,0xE58FB0];
+// holds: a few climbs per wall, 3-6 holds each, wandering sideways as they go up
+const HG={
+ jug:new THREE.DodecahedronGeometry(.17,0).scale(1.6,.8,.6),
+ crimp:new THREE.BoxGeometry(.46,.1,.14),
+ sloper:new THREE.IcosahedronGeometry(.2,0).scale(1.7,.75,.42),
+ edge:new THREE.BoxGeometry(.62,.12,.16),
+ pinch:new THREE.BoxGeometry(.3,.16,.15),
+ tri:new THREE.CylinderGeometry(.2,.2,.14,3).rotateX(Math.PI/2),
+ disc:new THREE.CylinderGeometry(.19,.22,.1,7).rotateX(Math.PI/2),
+ rail:new THREE.CylinderGeometry(.07,.07,.58,6).rotateZ(Math.PI/2),
+ pocket:new THREE.TorusGeometry(.13,.06,4,6),
+ knob:new THREE.OctahedronGeometry(.15,0).scale(1,1,.6),
+ spike:new THREE.ConeGeometry(.19,.28,4).rotateX(Math.PI/2).scale(1.3,1,.7),
+ dual:new THREE.IcosahedronGeometry(.13,0).translate(-.12,0,0).scale(1,1,.6),
+ vol:new THREE.TetrahedronGeometry(.62).scale(1.25,1,.5)};
+const TYPES=['jug','crimp','sloper','edge','pinch','tri','disc','rail','pocket','knob','spike','dual'];
 const hr=mulberry32(11);
-function place(i,u,v,type,c,rot){const{p,n}=surf(i,u,v);const m=mesh(HG[type],c);m.position.copy(p).addScaledVector(n,type==='vol'?.12:.05);m.lookAt(m.position.clone().add(n));m.rotateZ(rot);gym.add(m)}
-const WIDE=['jug','crimp','sloper','edge'],NARROW=['jug','pinch','sloper'];
-let pc=Math.floor(hr()*6);
-for(let i=0;i<6;i++){const wall=i%2===0,cols=wall?3:1,rows=wall?3:2;
- if(wall)place(i,.5+(hr()-.5)*.2,.5+(hr()-.5)*.08,'vol',0xEAE5DA,hr()*TAU);
- for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){if(wall&&r===1&&c===1)continue;
-  const u=(c+.5)/cols+(hr()-.5)*(.35/cols),v=.14+(r+.5)/rows*.78+(hr()-.5)*(.3/rows);
-  const types=wall?WIDE:NARROW;pc=(pc+1+Math.floor(hr()*2))%6;
-  place(i,Math.min(.88,Math.max(.12,u)),v,types[Math.floor(hr()*types.length)],PAL[pc],(hr()-.5)*.5)}}
+function place(a,y,type,c,rot){const s=surf(a,y);if(!s)return;const m=mesh(HG[type],c);m.position.copy(s.p).addScaledVector(s.n,type==='vol'?.12:.05);m.lookAt(m.position.clone().add(s.n));m.rotateZ(rot);gym.add(m)}
+// two volumes, total
+place(PHI(0)+6*D,1.75,'vol',0xEAE5DA,.4);
+place(PHI(2)-8*D,1.35,'vol',0xEAE5DA,2.1);
+const CLIMBS=[[0,-24,0x304C7E],[0,26,0xE0735A],[1,-22,0xE3B341],[1,24,0x6DB59A],[2,-26,0x8C7BC4],[2,22,0xE58FB0]];
+for(const [k,off,c] of CLIMBS){const n=3+Math.floor(hr()*4),base=PHI(k)+off*D;let side=hr()<.5?1:-1;
+ for(let h=0;h<n;h++){const y=.6+h/(n-1)*2.45+(hr()-.5)*.15;
+  const a=base+side*(7+hr()*9)*D;side=-side;
+  place(a,y,h===n-1?'jug':TYPES[Math.floor(hr()*TYPES.length)],c,(hr()-.5)*.5)}}
+
+// steel frame inside the shell: corner posts, two ring beams, cross braces
+{const steel=M(0x8F969F,{roughness:.55,metalness:.35}),T=.07;
+ const IN=R.map(ring=>ring.map(v=>{const d=Math.hypot(v.x,v.z),k=(d-TH-.1)/d;return new THREE.Vector3(v.x*k,v.y,v.z*k)}));
+ const beam=(p,q,t=T)=>{const len=p.distanceTo(q);const m=new THREE.Mesh(new THREE.BoxGeometry(t,t,len),steel);m.castShadow=m.receiveShadow=true;m.position.copy(p).lerp(q,.5);m.lookAt(q);gym.add(m)};
+ const at=(l,i,dy=0)=>IN[l][i].clone().add(new THREE.Vector3(0,dy,0));
+ for(let i=0;i<NV;i++){beam(at(0,i,.3),at(1,i));beam(at(1,i),at(2,i,-.08))}
+ for(let i=0;i<NV;i++){const j=(i+1)%NV;beam(at(1,i),at(1,j));beam(at(2,i,-.12),at(2,j,-.12))}
+ for(let i=0;i<NV;i+=2){const j=(i+1)%NV;beam(at(0,i,.3),at(1,j),.05);beam(at(1,i),at(2,j,-.12),.05)}
+ beam(at(1,0),at(1,4),.06);beam(at(1,2),at(1,6),.06);
+}
 
 // floor mat
 {const pts=R[0].map(v=>{const d=new THREE.Vector3(v.x,0,v.z),L=d.length();return d.multiplyScalar((L+1.8)/L)});
@@ -387,14 +418,9 @@ function drawDecal(i){const x=decalC.getContext('2d'),W=1024,H=640;x.clearRect(0
   x.font=F(700,16);track('CODED',W-140,176,4,'right');
   x.font=F(700,92);track('POSTCARDS',140,H-190,2,'left');
   x.font=F(700,19);track('CLUB FOR THE FUTURE · CAPSTONE 2026',144,H-140,5,'left');
- } else if(i===1){
-  x.fillStyle='#F4F1E8';x.fillRect(40,40,W-80,H-80);
-  x.fillStyle='#E0735A';x.fillRect(40,40,W-80,14);
-  x.fillStyle='#2B2B2B';x.font=F(500,230);track('10/10',96,330,-6,'left');
-  x.fillStyle='#55544F';x.font=F(500,40);x.fillText('couldn’t change an onboarding answer',100,420);
-  x.fillStyle='#304C7E';x.font=F(700,19);track('HINGE USABILITY STUDY · HCDE 417',100,H-92,5,'left');
-  // grid of ten failed tasks
-  for(let k=0;k<10;k++){x.fillStyle='#E0735A';x.fillRect(W-110-(9-k)*30,H-112,20,20)}
+ } else if(i===1){ // hinge: name only for now; swap in the official logo file when Chung supplies it
+  x.fillStyle='#F4F1E8';x.fillRect(150,110,W-300,H-220);
+  x.fillStyle='#2B2B2B';x.font=F(500,168);x.textAlign='center';x.fillText('Hinge',W/2,H/2+58);x.textAlign='left';
  } else {
   x.fillStyle='rgba(255,255,255,.9)';x.font=F(500,120);
   for(let p=0;p<4;p++){x.globalAlpha=.35;x.fillText('coming soon...',120+(kr()-.5)*5,360+(kr()-.5)*5)}
