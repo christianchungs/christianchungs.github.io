@@ -11,6 +11,7 @@
 <meta name="description" content="Christian Chung, product designer in Seattle. Case studies on Blue Origin's Club for the Future and a Hinge usability study, set inside a low-poly white room." />
 <link rel="preload" href="/fonts/Satoshi-Medium.woff2" as="font" type="font/woff2" crossorigin />
 
+
 <style is:inline>
 @font-face{font-family:'Satoshi';src:url(/fonts/Satoshi-Regular.woff2) format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Satoshi';src:url(/fonts/Satoshi-Medium.woff2) format('woff2');font-weight:500 600;font-display:swap}
@@ -59,6 +60,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 .chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule);padding:3px 7px;border-radius:2px}
 
 #hud{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:6;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:12px;color:var(--ink-3);text-align:center}
+#tabs{position:fixed;left:50%;top:126px;transform:translateX(-50%);z-index:6;display:flex;gap:26px}
 .tabs{display:flex;gap:22px}
 .tab{background:none;border:0;padding:4px 0;font:500 14px var(--f);color:var(--ink-3);cursor:pointer;border-bottom:1px solid transparent;display:flex;gap:7px;align-items:center}
 .tab i{width:8px;height:8px;transform:rotate(45deg);display:inline-block;opacity:.5}
@@ -67,6 +69,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 
 #pCase{position:fixed;z-index:5;left:52%;right:calc(var(--gut) + 190px);top:130px;bottom:0;overflow:auto;padding:20px 8px 90px 0;font-size:15.5px;line-height:1.65;color:var(--ink-2);
   -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 30px,#000 calc(100% - 80px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 30px,#000 calc(100% - 80px),transparent 100%)}
+#pCase{scrollbar-width:thin;scrollbar-color:rgba(43,43,43,.16) transparent}
+#pCase::-webkit-scrollbar{width:5px}
+#pCase::-webkit-scrollbar-track{background:transparent}
+#pCase::-webkit-scrollbar-thumb{background:rgba(43,43,43,.16);border-radius:3px}
+#pCase:hover::-webkit-scrollbar-thumb{background:rgba(43,43,43,.3)}
+.panel{scrollbar-width:thin;scrollbar-color:rgba(43,43,43,.14) transparent}
+.panel::-webkit-scrollbar{width:4px}
+.panel::-webkit-scrollbar-thumb{background:rgba(43,43,43,.14);border-radius:3px}
 #pCase .in{max-width:620px}
 #pCase h2{font-size:clamp(26px,2.4vw,38px);line-height:1.14;font-weight:500;color:var(--ink);letter-spacing:-.015em;margin:14px 0 22px;text-wrap:balance}
 #pCase h3{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);margin:34px 0 10px}
@@ -88,19 +98,20 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 @media (max-width:760px){
   .nav-in{height:64px}
   .nav a,.nav span{font-size:14px}.nav .logo{font-size:19px}
-  .side{font-size:12px;flex-direction:column!important;gap:4px;top:46%}
-  .side.l{left:8px;align-items:flex-start}.side.r{right:8px;align-items:flex-end}
-  .side .lbl{max-width:74px;text-align:inherit;line-height:1.2}
-  .side.r .lbl{text-align:right}
+  .side{top:auto;transform:none;bottom:calc(18px + env(safe-area-inset-bottom,0px));font-size:13px;padding:10px 14px;border:1px solid var(--rule);border-radius:2px;background:var(--bg);z-index:11}
+  .side.l{left:16px}.side.r{right:16px}
+  .side .lbl{max-width:34vw;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .panel{width:auto;left:16px!important;right:16px!important}
   #pL{top:80px;max-height:22vh}
   #pL .meta{display:none}
   .panel h2{font-size:20px;margin:8px 0 0}
-  #pR{bottom:92px;max-height:24vh;font-size:14px}
+  #pR{bottom:118px;max-height:22vh;font-size:14px}
   .stats b{font-size:22px}
-  #hud{bottom:18px;width:calc(100% - 32px)}
+  #hud{bottom:78px;width:calc(100% - 32px)}
+  #tabs{top:74px;gap:16px}
+  #tabs .tab{font-size:12px}
   .tabs{gap:14px}
-  #pCase{left:16px;right:16px;top:52vh;padding-bottom:60px}
+  #pCase{left:16px;right:16px;top:50vh;bottom:74px;padding-bottom:16px}
   #pCase h2{font-size:24px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -122,9 +133,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 
 <section class="panel" id="pL" aria-live="polite"></section>
 <section class="panel" id="pR"></section>
+<div id="tabs"></div>
 <div id="hud"></div>
 <section id="pCase" aria-live="polite"><div class="in"></div></section>
-<button id="shuffle">shuffle <span></span></button>
+<button id="shuffle">next project <span></span></button>
 
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -144,7 +156,7 @@ const PROJECTS=[
   blurb:'A space postcard maker for kids 8 to 12. Once we saw who was leaving, the work moved upstream of the canvas.'},
  {key:'hinge',title:'hinge',color:'#E0735A',set:'wall b · set dec 2025',
   headline:'All ten participants could use every feature. None could change an onboarding answer.',
-  meta:[['Context','HCDE 417 team study'],['Team','5 researchers'],['Participants','10, ages 18 to 29'],['Note','Independent. Not affiliated with Hinge']],
+  meta:[['Context','HCDE 417 team study'],['Team','5 researchers'],['Participants','10, ages 18 to 29'],['My part','Interview design, 2 sessions moderated']],
   stats:[['10/10','failed "adjust a previous answer"'],['6/10','couldn’t find Dating Preferences'],['12','ranked recommendations']],
   blurb:'A usability study of the new-user experience, measured against the app’s own promise: Designed to be Deleted.'},
  {key:'soon',title:'coming soon',color:'#E58FB0',set:'wall c · being set',
@@ -202,16 +214,16 @@ hinge:`<div class="eyebrow"><i style="background:#E0735A"></i>case study · hing
 <h3>What I'd be careful with</h3>
 <p>Several transcripts have no timestamps, so the headline complaint has no duration. Sampling ran through our own networks, and follow-up questions varied by moderator.</p>
 <h3>My part</h3>
-<p><span class="chip">[Placeholder]</span> Sessions moderated, sessions noted, findings owned.</p>`,
-soon:`<div class="eyebrow"><i style="background:#E58FB0"></i>case study · third slot</div><p class="soon">Coming soon...</p>`
+<p>I worked with the team on the interview design, and ran usability test interviews with two participants on my own.</p>`,
+soon:`<div class="eyebrow"><i style="background:#E58FB0"></i>breakdown · third slot</div><p class="soon">Coming soon...</p>`
 };
 
 const ITEMS={
- lantern:{name:'the lantern',color:'#E3B341',tag:'first thing packed',body:'The light that comes out once the fire is down to coals. Where it came from, and the trip it has been on the most.'},
- camera:{name:'the film camera',color:'#2B2B2B',tag:'36 frames at a time',body:'What you shoot on it, the roll you are proudest of, and how having only 36 frames changes how you look before pressing anything.'},
- mug:{name:'the enamel mug',color:'#304C7E',tag:'every morning at camp',body:'Coffee before anyone else is up. A small ritual, and what it says about how you like to start a day, or a project.'},
- sketch:{name:'the sketchbook',color:'#E0735A',tag:'before it goes into figma',body:'Where ideas live before they are ready to be pixels. The page you would show someone first, and why.'},
- chalk:{name:'the chalk bag',color:'#6DB59A',tag:'links to the next two rooms',body:'The thread to the gym and the crag. How climbing started, and what reading a route has taught you about working through a problem.'}
+ snowboard:{name:'the snowboard',color:'#304C7E',tag:'winters up the pass',body:'Where you ride, who you learned with, and what a season on the mountain has to do with how you work.'},
+ food:{name:'the camp skillet',color:'#E0735A',tag:'dinner is the main event',body:'The meal you always cook out here, the restaurant you send everyone to, and why food is how you get to know a place.'},
+ bible:{name:'the bible',color:'#8C7BC4',tag:'read most mornings',body:'What it steadies for you, and the verse you keep coming back to.'},
+ travel:{name:'the suitcase',color:'#E3B341',tag:'stickers from everywhere',body:'The trips on it so far, the one that changed how you see things, and where it is headed next.'},
+ cup:{name:'the camp cup',color:'#6DB59A',tag:'first thing packed',body:'Double-walled metal, folding handles, no logo. Coffee before anyone else is up, and what that half hour is for.'}
 };
 
 /* ---------- three setup ---------- */
@@ -245,28 +257,47 @@ function pine(x,z,s,rr){const g=new THREE.Group();const t=mesh(new THREE.Cylinde
 function rock(x,z,s,c,rr){const m=mesh(new THREE.DodecahedronGeometry(s,0),c||0x9E9C95);m.scale.y=.6;m.position.set(x,s*.3,z);m.rotation.set(rr(),rr()*TAU,rr());return m}
 
 /* ---------- GYM: the projects ---------- */
-const GX=0, gym=new THREE.Group(); gym.position.x=GX; scene.add(gym);
+const GX=0,GZ=0, gym=new THREE.Group(); gym.position.set(GX,0,GZ); scene.add(gym);
 const PHI=k=>k*TAU/3, D=Math.PI/180;
 // irregular footprint: 8 corners, each level has its own radii and break heights
-const ANG=[0,41,97,139,186,232,281,322].map(a=>a*D);
+const ANG=[18,62,98,142,178,222,258,302,338].map(a=>a*D);
 const LV=[
- {y:[0,0,0,0,0,0,0,0],            r:[2.9,3.05,2.6,3.1,2.8,2.45,3.0,2.7], tw:0},
- {y:[1.55,1.9,2.05,1.7,1.5,1.8,2.1,1.65], r:[3.3,2.7,3.05,3.55,2.55,2.95,3.4,2.75], tw:.05},
- {y:[3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4],    r:[2.55,2.25,3.5,3.3,2.15,3.15,2.8,2.05], tw:.1}];
+ {y:[0,0,0,0,0,0,0,0,0],                       r:[2.95,3.05,2.6,3.1,2.75,2.5,3.0,2.7,2.85], tw:0},
+ {y:[1.6,1.9,2.05,1.7,1.5,1.85,2.1,1.65,1.75], r:[3.3,2.75,3.05,3.5,2.6,2.95,3.35,2.8,3.15], tw:.05},
+ {y:[3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4,3.4],     r:[2.5,2.3,3.45,3.3,2.2,3.1,2.75,2.1,2.6],    tw:.1}];
 const NV=ANG.length;
+// face 8 leans out over its base; face 2 (the Hinge wall) is one tall panel, so its
+// mid-level corners sit on the straight line between bottom and top
+for(const i of [8,0]){LV[2].r[i]=LV[0].r[i]+ .55;LV[1].r[i]=LV[0].r[i]+.3;LV[1].y[i]=1.5}
+for(const i of [2,3]){LV[1].r[i]=(LV[0].r[i]+LV[2].r[i])/2;LV[1].y[i]=1.7}
+const SOLID=2; // face drawn as a single panel
 const R=LV.map(l=>ANG.map((a,i)=>{const b=a+l.tw;return new THREE.Vector3(Math.sin(b)*l.r[i],l.y[i],Math.cos(b)*l.r[i])}));
+// the single panel's corners must sit exactly on the line between bottom and top, or its
+// neighbours leave a hairline gap along the shared edge
+for(const i of [SOLID,(SOLID+1)%NV])R[1][i].copy(R[0][i]).lerp(R[2][i],.5);
 const PW=[[],[],[]],Pi=[],Pr=[];
 function tri(arr,a,b,c,up,inward){const n=new THREE.Vector3().subVectors(b,a).cross(new THREE.Vector3().subVectors(c,a));
  let ok; if(up) ok=n.y>0; else {const m=a.clone().add(b).add(c);m.y=0;ok=n.dot(m)>0; if(inward) ok=!ok}
  ok?arr.push(a,b,c):arr.push(a,c,b)}
 // outer panels (three plywood tones)
-for(let l=0;l<2;l++)for(let i=0;i<NV;i++){const j=(i+1)%NV,arr=PW[(i+l)%3],a=R[l][i],b=R[l][j],c=R[l+1][j],d=R[l+1][i];tri(arr,a,b,c);tri(arr,a,c,d)}
+for(let i=0;i<NV;i++){if(i===SOLID){const j=(i+1)%NV,arr=PW[1],a=R[0][i],b=R[0][j],c=R[2][j],d=R[2][i];tri(arr,a,b,c);tri(arr,a,c,d);continue}
+ for(let l=0;l<2;l++){const j=(i+1)%NV,arr=PW[(i+l)%3],a=R[l][i],b=R[l][j],c=R[l+1][j],d=R[l+1][i];tri(arr,a,b,c);tri(arr,a,c,d)}}
 // hollow: inner shell + plywood rim, no lid
-const TH=.14,RI=R.map(ring=>ring.map(v=>{const d=Math.hypot(v.x,v.z);return new THREE.Vector3(v.x*(d-TH)/d,v.y,v.z*(d-TH)/d)}));
-for(let l=0;l<2;l++)for(let i=0;i<NV;i++){const j=(i+1)%NV,a=RI[l][i],b=RI[l][j],c=RI[l+1][j],d=RI[l+1][i];tri(Pi,a,b,c,false,true);tri(Pi,a,c,d,false,true)}
+const TH=.3,RI=R.map(ring=>ring.map(v=>{const d=Math.hypot(v.x,v.z);return new THREE.Vector3(v.x*(d-TH)/d,v.y,v.z*(d-TH)/d)}));
+for(const i of [SOLID,(SOLID+1)%NV])RI[1][i].copy(RI[0][i]).lerp(RI[2][i],.5);
+for(let i=0;i<NV;i++){if(i===SOLID){const j=(i+1)%NV,a=RI[0][i],b=RI[0][j],c=RI[2][j],d=RI[2][i];tri(Pi,a,b,c,false,true);tri(Pi,a,c,d,false,true);continue}
+ for(let l=0;l<2;l++){const j=(i+1)%NV,a=RI[l][i],b=RI[l][j],c=RI[l+1][j],d=RI[l+1][i];tri(Pi,a,b,c,false,true);tri(Pi,a,c,d,false,true)}}
 for(let i=0;i<NV;i++){const j=(i+1)%NV,a=R[2][i],b=R[2][j],c=RI[2][j],d=RI[2][i];tri(Pr,a,b,c,true);tri(Pr,a,c,d,true)}
 const shell=[];
-for(const [arr,c] of [[PW[0],0xDCBF90],[PW[1],0xD2B182],[PW[2],0xE2C89C],[Pi,0xB39062],[Pr,0xE8D3AA]]){const g=new THREE.BufferGeometry().setFromPoints(arr);g.computeVertexNormals();const m=mesh(g,c);gym.add(m);if(arr!==Pi&&arr!==Pr)shell.push(m)}
+function quadFlat(g){ // both triangles of a panel share one normal, so it reads as a square panel
+ g.computeVertexNormals();const n=g.attributes.normal;
+ for(let i=0;i+5<n.count;i+=6){let x=0,y=0,z=0;
+  for(let j=0;j<6;j++){x+=n.getX(i+j);y+=n.getY(i+j);z+=n.getZ(i+j)}
+  const l=Math.hypot(x,y,z)||1;x/=l;y/=l;z/=l;
+  for(let j=0;j<6;j++)n.setXYZ(i+j,x,y,z)}
+ n.needsUpdate=true;return g}
+for(const [arr,c] of [[PW[0],0xDCBF90],[PW[1],0xD2B182],[PW[2],0xE2C89C],[Pi,0xB39062],[Pr,0xE8D3AA]]){
+ const g=quadFlat(new THREE.BufferGeometry().setFromPoints(arr));const m=mesh(g,c);gym.add(m);if(arr!==Pi&&arr!==Pr)shell.push(m)}
 gym.updateMatrixWorld(true);
 
 // find the wall surface at a compass angle and height by casting a ray at the boulder
@@ -277,40 +308,196 @@ function surf(a,y){const o=new THREE.Vector3(GX+Math.sin(a)*12,y,Math.cos(a)*12)
 
 // holds: a few climbs per wall, 3-6 holds each, wandering sideways as they go up
 const HG={
- jug:new THREE.DodecahedronGeometry(.17,0).scale(1.6,.8,.6),
- crimp:new THREE.BoxGeometry(.46,.1,.14),
- sloper:new THREE.IcosahedronGeometry(.2,0).scale(1.7,.75,.42),
- edge:new THREE.BoxGeometry(.62,.12,.16),
- pinch:new THREE.BoxGeometry(.3,.16,.15),
- tri:new THREE.CylinderGeometry(.2,.2,.14,3).rotateX(Math.PI/2),
- disc:new THREE.CylinderGeometry(.19,.22,.1,7).rotateX(Math.PI/2),
- rail:new THREE.CylinderGeometry(.07,.07,.58,6).rotateZ(Math.PI/2),
- pocket:new THREE.TorusGeometry(.13,.06,4,6),
- knob:new THREE.OctahedronGeometry(.15,0).scale(1,1,.6),
- spike:new THREE.ConeGeometry(.19,.28,4).rotateX(Math.PI/2).scale(1.3,1,.7),
- dual:new THREE.IcosahedronGeometry(.13,0).translate(-.12,0,0).scale(1,1,.6),
+ // big holds: chunky, read from across the room
+ jug:new THREE.DodecahedronGeometry(.27,0).scale(1.5,.85,.6),
+ sloper:new THREE.IcosahedronGeometry(.3,0).scale(1.6,.8,.42),
+ disc:new THREE.CylinderGeometry(.28,.32,.14,7).rotateX(Math.PI/2),
+ pocket:new THREE.TorusGeometry(.2,.09,4,6),
+ tri:new THREE.CylinderGeometry(.3,.3,.18,3).rotateX(Math.PI/2),
+ dual:new THREE.IcosahedronGeometry(.2,0).translate(-.17,0,0).scale(1,1,.6),
+ spike:new THREE.ConeGeometry(.26,.36,4).rotateX(Math.PI/2).scale(1.3,1,.7),
+ // crimps: thin, small edges
+ crimp:new THREE.BoxGeometry(.3,.055,.08),
+ edge:new THREE.BoxGeometry(.4,.06,.09),
+ chip:new THREE.BoxGeometry(.16,.05,.07),
+ flake:new THREE.CylinderGeometry(.13,.13,.06,3).rotateX(Math.PI/2).scale(1.6,.5,1),
  vol:new THREE.TetrahedronGeometry(.62).scale(1.25,1,.5)};
-const TYPES=['jug','crimp','sloper','edge','pinch','tri','disc','rail','pocket','knob','spike','dual'];
+const BIG=['jug','sloper','disc','pocket','tri','dual','spike'],CRIMP=['crimp','edge','chip','flake'];
+// how far each shape reaches forward, so a hold can be bolted flush instead of floating
+const DEPTH={};for(const k in HG){HG[k].computeBoundingBox();DEPTH[k]=HG[k].boundingBox.max.z}
 const hr=mulberry32(11);
-function place(a,y,type,c,rot){const s=surf(a,y);if(!s)return;const m=mesh(HG[type],c);m.position.copy(s.p).addScaledVector(s.n,type==='vol'?.12:.05);m.lookAt(m.position.clone().add(s.n));m.rotateZ(rot);gym.add(m)}
-// two volumes, total
-place(PHI(0)+6*D,1.75,'vol',0xEAE5DA,.4);
-place(PHI(2)-8*D,1.35,'vol',0xEAE5DA,2.1);
-const CLIMBS=[[0,-24,0x304C7E],[0,26,0xE0735A],[1,-22,0xE3B341],[1,24,0x6DB59A],[2,-26,0x8C7BC4],[2,22,0xE58FB0]];
-for(const [k,off,c] of CLIMBS){const n=3+Math.floor(hr()*4),base=PHI(k)+off*D;let side=hr()<.5?1:-1;
- for(let h=0;h<n;h++){const y=.6+h/(n-1)*2.45+(hr()-.5)*.15;
-  const a=base+side*(7+hr()*9)*D;side=-side;
-  place(a,y,h===n-1?'jug':TYPES[Math.floor(hr()*TYPES.length)],c,(hr()-.5)*.5)}}
+const any=a=>a[Math.floor(hr()*a.length)];
+// everything placed gets a bounding sphere so nothing ends up inside anything else
+const OCC=[],FLOOR=[];
+const freeAt=(p,r)=>!OCC.some(o=>o.p.distanceTo(p)<o.r+r);
+const RAD={jug:.3,sloper:.32,disc:.3,pocket:.24,tri:.3,dual:.26,spike:.28,crimp:.2,edge:.24,chip:.13,flake:.16,vol:.75};
+function place(a,y,type,c,rot,scale){const s=surf(a,y);if(!s)return null;
+ const sc=scale||1,w=RAD[type]*sc,rad=Math.hypot(s.p.x,s.p.z);
+ // read the panel around the hold: average its plane, and find how far it bulges forward
+ const n=s.n.clone();let bulge=0,flat=true;
+ for(const [da,dy] of[[-1,0],[1,0],[0,-1],[0,1],[-.7,-.7],[.7,.7],[-.7,.7],[.7,-.7]]){
+  const q=surf(a+da*.75*w/rad,y+dy*.75*w);
+  if(!q){flat=false;break}
+  if(q.n.dot(s.n)<.78){flat=false;break}          // a real fold: not a flat patch
+  n.add(q.n);bulge=Math.max(bulge,q.p.clone().sub(s.p).dot(s.n));
+  if(bulge>.22){flat=false;break}}
+ if(!flat)return null;
+ n.normalize();
+ const p=s.p.clone().addScaledVector(n,DEPTH[type]*sc+bulge-.012); // sits flat on the panel
+ if(!freeAt(p,w))return null;
+ const m=mesh(HG[type],c);m.scale.setScalar(sc);m.position.copy(p);m.lookAt(p.clone().add(n));m.rotateZ(rot);gym.add(m);
+ OCC.push({p:p.clone(),r:w});return m}
+
+// one volume; wall c is stripped for resetting
+place(PHI(0)-2*D,1.75,'vol',0xEAE5DA,.4);
+
+// four climbs, each with its own hold family, span and movement style
+const STYLES={
+ crimps:{shapes:['crimp','edge','chip','flake'],n:[7,9],step:[.3,.46],lat:[.1,.3],top:'edge'},
+ power:{shapes:['jug','sloper'],n:[5,6],step:[.55,.78],lat:[.3,.65],top:'jug'},
+ pockets:{shapes:['pocket','disc','dual'],n:[6,8],step:[.38,.58],lat:[.16,.42],top:'jug'},
+ slopers:{shapes:['sloper','spike','tri'],n:[5,7],step:[.42,.66],lat:[.22,.5],top:'jug'},
+ // a sideways line that cuts across the others; the collision check keeps them from touching
+ traverse:{shapes:['jug','edge','pocket','crimp'],n:[7,9],step:[.04,.18],lat:[.45,.72],top:'jug',oneWay:true,span:46}};
+// [wall, start angle offset, colour, style, bottom, top]
+const CLIMBS=[[0,-19,0x304C7E,'crimps',.62,2.75],[0,17,0xE0735A,'power',.68,2.95],
+              [0,-36,0x8C7BC4,'traverse',1.25,2.15],
+              [1,-18,0xE3B341,'pockets',.62,2.7],[1,19,0x6DB59A,'slopers',.75,2.9]];
+const rr=r=>r[0]+hr()*(r[1]-r[0]);
+for(const [k,off,c,sty,y0,y1] of CLIMBS){const S=STYLES[sty],n=Math.round(rr(S.n));
+ const span=(S.span||34)*D;
+ let y=y0,ang=PHI(k)+off*D,dir=S.oneWay?1:(hr()<.5?1:-1);
+ for(let h=0;h<n;h++){
+  const last=h===n-1;
+  for(let tryN=0;tryN<14;tryN++){
+   const step=h===0?0:rr(S.step)*(last?1.15:1),lat=h===0?0:rr(S.lat)*dir;
+   const s0=surf(ang,y);if(!s0)break;
+   const radius=Math.hypot(s0.p.x,s0.p.z);
+   let na=ang+lat/radius,ny=Math.min(y+step,y1);
+   na=Math.max(PHI(k)-span,Math.min(PHI(k)+span,na));
+   const type=last?S.top:S.shapes[Math.floor(hr()*S.shapes.length)];
+   const m=place(na,ny,type,c,(hr()-.5)*1.6,.7+hr()*.6);
+   if(m){ang=na;y=ny;if(!S.oneWay&&hr()<.65)dir=-dir;break}
+   if(!S.oneWay)dir=-dir;if(tryN%3===2)y+=.08}
+  if(y>=y1)break}}
+
+// the rest of the set: holds from other colours scattered between the named lines,
+// the way a real wall is never down to just a few routes
+{const OLD=[0x9A9A94,0x3B3F46,0x7D8088],  // stripped-back older sets, so the colour routes stay legible
+   MIX=['jug','sloper','disc','pocket','tri','dual','crimp','edge','chip','flake'];
+ for(const k of [0,1]){
+  for(let i=0;i<7;i++){
+   const type=MIX[Math.floor(hr()*MIX.length)],c=OLD[Math.floor(hr()*OLD.length)];
+   for(let t=0;t<10;t++){
+    const a=PHI(k)+(hr()-.5)*66*D,y=.75+hr()*2.05;
+    if(place(a,y,type,c,(hr()-.5)*1.6,.6+hr()*.4))break}}}}
 
 // steel frame inside the shell: corner posts, two ring beams, cross braces
-{const steel=M(0x8F969F,{roughness:.55,metalness:.35}),T=.07;
- const IN=R.map(ring=>ring.map(v=>{const d=Math.hypot(v.x,v.z),k=(d-TH-.1)/d;return new THREE.Vector3(v.x*k,v.y,v.z*k)}));
+{const T=.13,steel=M(0x8F969F,{roughness:.55,metalness:.35});
+ const IN=R.map(ring=>ring.map(v=>{const d=Math.hypot(v.x,v.z),k=(d-TH-T/2-.04)/d;return new THREE.Vector3(v.x*k,v.y,v.z*k)}));
  const beam=(p,q,t=T)=>{const len=p.distanceTo(q);const m=new THREE.Mesh(new THREE.BoxGeometry(t,t,len),steel);m.castShadow=m.receiveShadow=true;m.position.copy(p).lerp(q,.5);m.lookAt(q);gym.add(m)};
  const at=(l,i,dy=0)=>IN[l][i].clone().add(new THREE.Vector3(0,dy,0));
- for(let i=0;i<NV;i++){beam(at(0,i,.3),at(1,i));beam(at(1,i),at(2,i,-.08))}
- for(let i=0;i<NV;i++){const j=(i+1)%NV;beam(at(1,i),at(1,j));beam(at(2,i,-.12),at(2,j,-.12))}
- for(let i=0;i<NV;i+=2){const j=(i+1)%NV;beam(at(0,i,.3),at(1,j),.05);beam(at(1,i),at(2,j,-.12),.05)}
- beam(at(1,0),at(1,4),.06);beam(at(1,2),at(1,6),.06);
+ for(let i=0;i<NV;i++){beam(at(0,i,.3),at(1,i));beam(at(1,i),at(2,i,-.22))}
+ for(let i=0;i<NV;i++){const j=(i+1)%NV;beam(at(1,i),at(1,j));beam(at(2,i,-.26),at(2,j,-.26))}
+ for(let i=0;i<NV;i+=2){const j=(i+1)%NV;beam(at(0,i,.3),at(1,j),.1);beam(at(1,i),at(2,j,-.26),.1)}
+ beam(at(1,0),at(1,4),.12);beam(at(1,2),at(1,6),.12);
+}
+
+// wall c is being reset: the CLOSED sign lies flat on the mat, holds are spread out
+// ready to go up, and the cones, ladders and drills keep out of each other's way
+{const pc=document.createElement('canvas');pc.width=512;pc.height=256;const x=pc.getContext('2d');
+ const tex=new THREE.CanvasTexture(pc);
+ const draw=()=>{x.fillStyle='#FFFFFF';x.fillRect(0,0,512,256);x.fillStyle='#2B2B2B';x.textAlign='center';x.textBaseline='middle';
+  x.font='700 124px Satoshi, Helvetica, Arial, sans-serif';x.fillText('CLOSED',256,136);tex.needsUpdate=true};
+ draw();window.__posterDraw=draw;
+ const MT=.36,dirOut=a=>new THREE.Vector3(Math.sin(a),0,Math.cos(a));
+ const ringR=a=>{const s=surf(a,.4);return s?Math.hypot(s.p.x,s.p.z):3};
+ // keep every prop clear of every other one
+ const SPOTS=[];
+ const room=(p,r)=>SPOTS.every(o=>Math.hypot(o.p.x-p.x,o.p.z-p.z)>o.r+r);
+ const claim=(p,r)=>{SPOTS.push({p:p.clone(),r})};
+ const spot=(da,dr,r)=>{const a=PHI(2)+da*D,p=dirOut(a).multiplyScalar(ringR(a)+dr);if(!room(p,r))return null;claim(p,r);return p};
+ const put=(obj,da,dr,ry,y,r)=>{const p=spot(da,dr,r);if(!p)return null;obj.position.set(p.x,y,p.z);obj.rotation.y=ry;gym.add(obj);return obj};
+ // the CLOSED sign lying flat on the mat, turned so it reads upright head-on
+ {let p=null;for(const [da,dr] of [[42,1.05],[48,1.25],[34,1.2],[38,1.5]]){p=spot(da,dr,.8);if(p)break}
+  if(p){const wrap=new THREE.Group();
+   const sign=new THREE.Mesh(new THREE.PlaneGeometry(1.3,.65),new THREE.MeshBasicMaterial({map:tex,color:0xF2F1ED,side:THREE.DoubleSide}));
+   sign.rotation.x=-Math.PI/2;sign.position.y=.03;wrap.add(sign);
+   const edge=mesh(new THREE.BoxGeometry(1.34,.025,.69),0xE6E4DE);edge.position.y=.012;wrap.add(edge);
+   wrap.position.set(p.x,MT+.02,p.z);wrap.rotation.y=PHI(2)+.14;gym.add(wrap)}}
+ // cones and tape, out on the floor past the mat
+ const conePos=[];
+ for(const da of [-52,-18,18,52]){const p=spot(da,3.05,.45);if(!p)continue;conePos.push(p);
+  const cone=new THREE.Group();const base=mesh(new THREE.BoxGeometry(.34,.04,.34),0xE0735A);base.position.y=.02;cone.add(base);
+  const body=mesh(new THREE.CylinderGeometry(.05,.15,.5,6),0xEE8A4A);body.position.y=.29;cone.add(body);
+  const cap2=mesh(new THREE.CylinderGeometry(.06,.06,.035,6),0xE0735A);cap2.position.y=.555;cone.add(cap2);
+  const band=mesh(new THREE.CylinderGeometry(.085,.1,.08,6),0xFFFFFF);band.position.y=.3;cone.add(band);
+  cone.position.copy(p);cone.rotation.y=hr()*TAU;gym.add(cone)}
+ for(let i=0;i<conePos.length-1;i++){const p=conePos[i].clone(),q=conePos[i+1].clone();p.y=q.y=.43;
+  const len=p.distanceTo(q);const t=mesh(new THREE.BoxGeometry(.02,.07,len),0xE3B341);t.position.copy(p).lerp(q,.5);t.lookAt(q);gym.add(t)}
+ // a straight ladder leaning on the closed wall
+ {const aL=PHI(2)+12*D,top=surf(aL,2.55);
+  if(top){const topP=top.p.clone().addScaledVector(top.n,.07);
+   // push the top out until both rails, not just the centre line, rest on the wall
+   {const radT=Math.hypot(top.p.x,top.p.z);let push=0;
+    for(const d of[-1,1]){const q=surf(aL+d*.23/radT,2.55);if(q)push=Math.max(push,q.p.clone().sub(topP).dot(top.n))}
+    topP.addScaledVector(top.n,push+.075)} // the rubber top ends are the only thing touching
+   let baseP=null;
+   for(const d of [.72,.85,.98,.62]){const b2=topP.clone();b2.y=MT;b2.addScaledVector(dirOut(aL),d);
+    if(room(b2,.6)){baseP=b2;break}}
+   if(!baseP){baseP=topP.clone();baseP.y=MT;baseP.addScaledVector(dirOut(aL),1.5)}
+   const len=baseP.distanceTo(topP),al=0xC9CDD2,L=new THREE.Group();
+   for(const sx of[-.23,.23]){const r=mesh(new THREE.BoxGeometry(.07,len,.07),al);r.position.set(sx,len/2,0);L.add(r)}
+   {const y0=.32,y1=len-.3,n=Math.max(4,Math.round((y1-y0)/.38)+1);
+    for(let i=0;i<n;i++){const st=mesh(new THREE.BoxGeometry(.46,.045,.05),0xB9BEC4);st.position.y=y0+(y1-y0)*i/(n-1);L.add(st)}}
+   for(const sx of[-.23,.23]){
+    const foot=mesh(new THREE.CylinderGeometry(.075,.085,.09,6),0x2E3238);foot.position.set(sx,.045,0);L.add(foot);
+    const cap=mesh(new THREE.CylinderGeometry(.075,.075,.12,6),0x2E3238);cap.position.set(sx,len-.01,0);L.add(cap)}
+   L.position.copy(baseP);
+   {const up=topP.clone().sub(baseP).normalize(),out=dirOut(aL);
+    const right=new THREE.Vector3().crossVectors(up,out).normalize();
+    const fwd=new THREE.Vector3().crossVectors(right,up).normalize();
+    L.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(right,up,fwd))}
+   gym.add(L);claim(baseP,.6)}}
+ // the setters' tool box on the mat
+ {const T=new THREE.Group();
+  const body=mesh(new THREE.BoxGeometry(.62,.3,.34),0xE0735A);body.position.y=.15;T.add(body);
+  const lid=mesh(new THREE.BoxGeometry(.64,.06,.36),0xC8543C);lid.position.y=.32;T.add(lid);
+  const latch=mesh(new THREE.BoxGeometry(.08,.1,.02),0xC9CDD2);latch.position.set(0,.26,.18);T.add(latch);
+  for(const sx of[-.16,.16]){const post=mesh(new THREE.BoxGeometry(.04,.14,.04),0x3B3F46);post.position.set(sx,.4,0);T.add(post)}
+  const grip=mesh(new THREE.BoxGeometry(.4,.045,.05),0x3B3F46);grip.position.y=.47;T.add(grip);
+  const wrench=mesh(new THREE.BoxGeometry(.26,.03,.05),0xB9BEC4);wrench.position.set(.42,.015,.1);wrench.rotation.y=.5;T.add(wrench);
+  let box=null;
+  for(const [da,dr] of [[-30,1.25],[-40,1.35],[-20,1.45],[-46,1.5]])if(!box)box=put(T,da,dr,-.4,MT,.7);
+  window.__toolbox=box}
+ const drill=(col)=>{const g=new THREE.Group();
+  const body=mesh(new THREE.BoxGeometry(.42,.14,.14),col);g.add(body);
+  const nose=mesh(new THREE.CylinderGeometry(.05,.06,.12,6),0x3B3F46);nose.rotation.z=Math.PI/2;nose.position.x=.27;g.add(nose);
+  const bit=mesh(new THREE.CylinderGeometry(.012,.012,.16,4),0xC9CDD2);bit.rotation.z=Math.PI/2;bit.position.x=.41;g.add(bit);
+  const grip=mesh(new THREE.BoxGeometry(.11,.3,.12),0x3B3F46);grip.position.set(-.08,-.2,0);grip.rotation.z=-.2;g.add(grip);
+  const bat=mesh(new THREE.BoxGeometry(.2,.09,.16),col);bat.position.set(-.1,-.38,0);g.add(bat);return g};
+ const lying=(col)=>{const d=drill(col);d.rotation.x=Math.PI/2;d.position.y=.07;const w=new THREE.Group();w.add(d);return w};
+ // the drill lies on the mat beside the tool box, always inside the mat edge
+ {const d=lying(0xE3B341),box=window.__toolbox;
+  const onMat=p=>{const a=Math.atan2(p.x,p.z),lo=ringR(a)+.5,hi=ringR(a)+1.35,len=Math.hypot(p.x,p.z);
+   const k=Math.min(hi,Math.max(lo,len))/len;return new THREE.Vector3(p.x*k,0,p.z*k)};
+  let spotP=null;
+  if(box){const a0=Math.atan2(box.position.x,box.position.z),r0=Math.hypot(box.position.x,box.position.z);
+   for(const [da,dr] of [[10,0],[-10,0],[14,-.3],[-14,-.3],[6,-.55],[18,.15]]){
+    if(spotP)continue;
+    const a=a0+da*D,r=r0+dr,c=onMat(new THREE.Vector3(Math.sin(a)*r,0,Math.cos(a)*r));
+    if(room(c,.38))spotP=c}
+   if(!spotP){const a=a0+12*D,r=r0-.2;spotP=onMat(new THREE.Vector3(Math.sin(a)*r,0,Math.cos(a)*r))}}
+  if(spotP){claim(spotP,.38);d.position.set(spotP.x,MT,spotP.z);d.rotation.y=.9;gym.add(d)}
+  else put(d,-14,1.05,.9,MT,.4)}
+ // holds waiting to go up: all one colour, lying flat, spread unevenly across the mat
+ {const shapes=['jug','sloper','disc','tri','pocket','edge','crimp','dual','spike','flake','jug','disc','sloper','pocket'];
+  for(let i=0;i<16;i++){const g=new THREE.Group();const m=mesh(HG[shapes[i%shapes.length]],0x8C7BC4);
+   m.rotation.set(-Math.PI/2,hr()*TAU,0,'YXZ');m.scale.setScalar(.85);m.position.y=.05;g.add(m);
+   for(let t=0;t<60;t++){const da=-46+hr()*70,dr=.3+hr()*1.15;
+    if(put(g,da,dr,hr()*TAU,MT,.3))break}}}
+ put(lying(0x6DB59A),30,4.0,-1.1,0,.4);
+
 }
 
 // floor mat
@@ -319,7 +506,7 @@ for(const [k,off,c] of CLIMBS){const n=3+Math.floor(hr()*4),base=PHI(k)+off*D;le
  g.rotateX(-Math.PI/2);const m=mesh(g,0x3E4553);m.castShadow=false;gym.add(m)}
 
 /* ---------- CAMPSITE ---------- */
-const CX=-70, camp=new THREE.Group(); camp.position.x=CX; scene.add(camp);
+const CX=-45,CZ=-78, camp=new THREE.Group(); camp.position.set(CX,0,CZ); scene.add(camp);
 const cr=mulberry32(5), G=.16;
 camp.add(slab(7.2,0xC6D0A0,11,3,G));
 {const t=new THREE.Group();const g=new THREE.ExtrudeGeometry(new THREE.Shape([new THREE.Vector2(-1.35,0),new THREE.Vector2(1.35,0),new THREE.Vector2(0,1.9)]),{depth:3,bevelEnabled:false});g.translate(0,0,-1.5);t.add(mesh(g,0xE07A5F));
@@ -346,55 +533,133 @@ function item(key,build,x,y,z,ry){const g=new THREE.Group();build(g);g.position.
  g.scale.setScalar(1.7);g.userData={key,base:new THREE.Vector3(x,y,z),ry,lift:0,spin:0};
  const mk=new THREE.Mesh(new THREE.OctahedronGeometry(.075,0),new THREE.MeshBasicMaterial({color:0x304C7E}));mk.position.set(x,y+1.1,z);camp.add(mk);g.userData.marker=mk;
  camp.add(g);interactive.push(g);g.traverse(o=>{if(o.isMesh){o.userData.item=g;targets.push(o)}})}
-item('lantern',g=>{const b=mesh(new THREE.CylinderGeometry(.15,.17,.08,6),0x3B3F46);b.position.y=.04;g.add(b);
- const gl=mesh(new THREE.CylinderGeometry(.12,.12,.3,6),0xFBE6A2,{emissive:0xF6C544,emissiveIntensity:.55});gl.position.y=.23;g.add(gl);
- const t=mesh(new THREE.ConeGeometry(.17,.14,6),0x3B3F46);t.position.y=.45;g.add(t);
- const h=mesh(new THREE.TorusGeometry(.1,.014,4,8,Math.PI),0x3B3F46);h.position.y=.52;g.add(h)},-1.3,G+.57,2,.3);
-item('camera',g=>{const b=mesh(new THREE.BoxGeometry(.52,.3,.2),0x2E2E2E);b.position.y=.15;g.add(b);
- const tp=mesh(new THREE.BoxGeometry(.52,.07,.2),0xD6D5D0);tp.position.y=.33;g.add(tp);
- const l=mesh(new THREE.CylinderGeometry(.1,.11,.16,8),0x1F1F1F);l.rotation.x=Math.PI/2;l.position.set(0,.15,.17);g.add(l);
- const r=mesh(new THREE.CylinderGeometry(.115,.115,.03,8),0xD6D5D0);r.rotation.x=Math.PI/2;r.position.set(0,.15,.1);g.add(r);
- const s=mesh(new THREE.BoxGeometry(.08,.05,.06),0xE0735A);s.position.set(.17,.39,0);g.add(s)},2.9,G+.49,-.7,.9-Math.PI/2);
-item('mug',g=>{const b=mesh(new THREE.CylinderGeometry(.13,.12,.26,8),0xF3F0E8);b.position.y=.13;g.add(b);
- const r=mesh(new THREE.TorusGeometry(.13,.018,4,8),0x304C7E);r.rotation.x=Math.PI/2;r.position.y=.26;g.add(r);
- const h=mesh(new THREE.TorusGeometry(.07,.02,4,6),0x304C7E);h.position.set(.16,.14,0);g.add(h)},2.2,G+.2,2.2,-.4);
-item('sketch',g=>{const c=mesh(new THREE.BoxGeometry(.58,.05,.42),0xE0735A);c.position.y=.025;g.add(c);
- const p=mesh(new THREE.BoxGeometry(.54,.03,.39),0xF6F3EA);p.position.set(.01,.065,0);g.add(p);
- const pe=mesh(new THREE.CylinderGeometry(.018,.018,.5,6),0xE3B341);pe.rotation.z=Math.PI/2;pe.rotation.y=.4;pe.position.set(.05,.1,.05);g.add(pe)},-.4,G+.01,3.1,.25);
-item('chalk',g=>{const b=mesh(new THREE.CylinderGeometry(.17,.15,.32,7),0x6DB59A);b.position.y=.16;g.add(b);
- const r=mesh(new THREE.TorusGeometry(.17,.025,4,7),0xF3F0E8);r.rotation.x=Math.PI/2;r.position.y=.32;g.add(r);
- const c=mesh(new THREE.CylinderGeometry(.14,.14,.02,7),0xFFFFFF);c.position.y=.3;g.add(c);
- const belt=mesh(new THREE.TorusGeometry(.19,.012,3,10),0x3B3F46);belt.rotation.x=Math.PI/2;belt.position.y=.1;g.add(belt)},-1.1,G,-.3,0);
+item('snowboard',g=>{
+ // outline with clipped corners so it reads as a rounded board
+ const sh=new THREE.Shape();const L=.78,W=.17,c=.07;
+ sh.moveTo(-L,-W+c);sh.lineTo(-L+c*1.6,-W);sh.lineTo(L-c*1.6,-W);sh.lineTo(L,-W+c);
+ sh.lineTo(L,W-c);sh.lineTo(L-c*1.6,W);sh.lineTo(-L+c*1.6,W);sh.lineTo(-L,W-c);sh.closePath();
+ const bg=new THREE.ExtrudeGeometry(sh,{depth:.045,bevelEnabled:false});bg.rotateX(-Math.PI/2);
+ const b=mesh(bg,0x304C7E);b.position.y=.045;g.add(b);
+ const sg=new THREE.ExtrudeGeometry(sh,{depth:.01,bevelEnabled:false});sg.rotateX(-Math.PI/2);sg.scale(.62,1,.5);
+ const stripe=mesh(sg,0xE3B341);stripe.position.set(.08,.095,0);g.add(stripe);
+ for(const d of[-.26,.2]){const bind=mesh(new THREE.BoxGeometry(.2,.06,.3),0x3B3F46);bind.position.set(d,.12,0);bind.rotation.y=.12;g.add(bind)}
+},-4.2,G,1.6,.9);
+item('food',g=>{const pan=mesh(new THREE.CylinderGeometry(.34,.3,.1,9),0x3B3F46);pan.position.y=.05;g.add(pan);
+ const rim=mesh(new THREE.TorusGeometry(.34,.025,4,9),0x2E2E2E);rim.rotation.x=Math.PI/2;rim.position.y=.1;g.add(rim);
+ const food=mesh(new THREE.CylinderGeometry(.24,.24,.06,8),0xE0735A);food.position.y=.11;g.add(food);
+ for(let i=0;i<5;i++){const bit=mesh(new THREE.BoxGeometry(.09,.05,.09),i%2?0xE3B341:0x6DB59A);bit.position.set(Math.sin(i*1.3)*.13,.16,Math.cos(i*1.3)*.13);bit.rotation.y=i;g.add(bit)}
+ const handle=mesh(new THREE.BoxGeometry(.42,.05,.07),0x2E2E2E);handle.position.set(.5,.08,0);g.add(handle)},2.2,G+.2,2.2,-.5);
+item('bible',g=>{const cover=mesh(new THREE.BoxGeometry(.4,.07,.3),0x2A2F45);cover.position.y=.035;g.add(cover);
+ const pages=mesh(new THREE.BoxGeometry(.36,.06,.27),0xF3F0E8);pages.position.set(.01,.04,0);g.add(pages);
+ const top=mesh(new THREE.BoxGeometry(.4,.02,.3),0x2A2F45);top.position.y=.08;g.add(top);
+ const ribbon=mesh(new THREE.BoxGeometry(.03,.005,.18),0xE0735A);ribbon.position.set(.05,.072,.2);g.add(ribbon)},-1.3,G+.57,2,.3);
+item('travel',g=>{const body=mesh(new THREE.BoxGeometry(.56,.36,.2),0x9A7048);body.position.y=.18;g.add(body);
+ const belt=mesh(new THREE.BoxGeometry(.58,.05,.21),0x6B4B2E);belt.position.set(0,.14,0);g.add(belt);
+ const handle=mesh(new THREE.TorusGeometry(.08,.018,4,8,Math.PI),0x3B3F46);handle.position.y=.37;g.add(handle);
+ const s1=mesh(new THREE.BoxGeometry(.12,.09,.01),0xE3B341);s1.position.set(-.14,.24,.105);g.add(s1);
+ const s2=mesh(new THREE.BoxGeometry(.1,.1,.01),0x6DB59A);s2.position.set(.12,.2,.105);s2.rotation.z=.4;g.add(s2);
+ const tag=mesh(new THREE.BoxGeometry(.08,.12,.01),0xF3F0E8);tag.position.set(.2,.32,.1);tag.rotation.z=.3;g.add(tag)},-.5,G,3.1,.35);
+item('cup',g=>{const b=mesh(new THREE.CylinderGeometry(.14,.12,.24,9),0xC9CDD2,{metalness:.45,roughness:.35});b.position.y=.12;g.add(b);
+ const r=mesh(new THREE.TorusGeometry(.14,.012,4,9),0xB4B9BF,{metalness:.45,roughness:.35});r.rotation.x=Math.PI/2;r.position.y=.24;g.add(r);
+ for(const sgn of[1,-1]){const h=mesh(new THREE.BoxGeometry(.03,.02,.16),0xB4B9BF,{metalness:.45,roughness:.35});h.position.set(sgn*.15,.16,0);h.rotation.x=.35;g.add(h)}},-1.1,G,-.4,0);
 
-/* ---------- CRAG: case studies ---------- */
-const KX=70, crag=new THREE.Group(); crag.position.x=KX; scene.add(crag);
+/* ---------- BOULDER BREAKDOWN: one island per project ---------- */
+const KX=45,KZ=-78, crag=new THREE.Group(); crag.position.set(KX,0,KZ); scene.add(crag);
+const island=new THREE.Group(); crag.add(island);
 const kr=mulberry32(21);
-crag.add(slab(5.6,0xCBD1A6,10,9,.14));
-[[-4,-3.4,1.25],[4.2,-3.2,1.05],[-2.6,-4.6,.9]].forEach(([x,z,s])=>crag.add(pine(x,z,s,kr)));
-[[3.4,1.8,.3],[-3.2,2.2,.22],[2.4,3.2,.16],[-1.8,3.4,.2]].forEach(([x,z,s])=>crag.add(rock(x,z,s,0xA7A59E,kr)));
-for(let i=0;i<9;i++){const t=mesh(new THREE.ConeGeometry(.08,.34,3),0x7FA06B);const a=kr()*TAU,d=3+kr()*1.8;t.position.set(Math.sin(a)*d,.3,Math.cos(a)*d*.8);crag.add(t)}
-{const pad=new THREE.Group();pad.add(mesh(new THREE.BoxGeometry(1.7,.26,1.25),0x304C7E));const st=mesh(new THREE.BoxGeometry(1.72,.27,.18),0x2B2B2B);pad.add(st);
- pad.position.set(-2.9,.27,1.4);pad.rotation.y=.35;crag.add(pad)}
-
-const pivot=new THREE.Group();crag.add(pivot);
 const ZF=1.55,YB=-1.35;
-{const g=new THREE.IcosahedronGeometry(2.4,2),pa=g.attributes.position,v=new THREE.Vector3();
- const nz=(x,y,z)=>.5*Math.sin(1.9*x+.3)*Math.cos(1.6*z-.8)+.35*Math.sin(2.7*y+1.1+x)+.22*Math.sin(3.3*z+2.1*y);
- for(let i=0;i<pa.count;i++){v.fromBufferAttribute(pa,i);const n=nz(v.x/2.4,v.y/2.4,v.z/2.4);v.multiplyScalar(1+.15*n);v.x*=1.42;v.y*=.95;
+
+function buildRock(P){
+ const g=new THREE.IcosahedronGeometry(2.4,2),pa=g.attributes.position,v=new THREE.Vector3(),rn=mulberry32(P.seed);
+ const nz=(x,y,z)=>.5*Math.sin(P.f1*x+.3)*Math.cos(1.6*z-.8)+.35*Math.sin(2.7*y+1.1+x)+.22*Math.sin(P.f2*z+2.1*y);
+ const CUTS=P.cuts.map(([x,y,z,d])=>[new THREE.Vector3(x,y,z).normalize(),d]);
+ for(let i=0;i<pa.count;i++){v.fromBufferAttribute(pa,i);const u=v.clone().normalize();
+  const p=P.box,rb=1/Math.pow(Math.abs(u.x)**p+Math.abs(u.y)**p+Math.abs(u.z)**p,1/p);
+  v.copy(u).multiplyScalar(2.4*rb*(1+.1*nz(u.x,u.y,u.z)));
+  v.x*=P.wide;v.y*=P.tall;v.x+=v.y*P.lean;
+  // one side leans out over its own base
+  const ang=Math.atan2(v.x,v.z),ov=Math.max(0,Math.cos(ang-P.over)),yn=(v.y+2.4)/4.8;
+  const k1=1+P.overAmt*ov*(yn-.45);v.x*=k1;v.z*=k1;
+  // a ledge: the rock steps out just under this height, then pulls back in
+  const lv=Math.max(0,Math.cos(ang-P.ledgeAng));
+  if(v.y>P.ledgeY-.4&&v.y<P.ledgeY+.12){const k2=1+P.ledgeAmt*lv*(1-Math.abs(v.y-P.ledgeY+.14)/.3);v.x*=k2;v.z*=k2}
+  for(const [n,d] of CUTS){const k=v.dot(n);if(k>d)v.addScaledVector(n,d-k)}
+  const t=(v.y+2.6)/P.step,fr=t-Math.floor(t),ss=fr<.35?0:fr>.65?1:(fr-.35)/.3;
+  const k=1-.16*fr; v.x*=k; v.z*=k;
+  v.y=v.y*.45+((Math.floor(t)+ss)*P.step-2.6)*.55;
+  if(v.y>P.top)v.y=P.top+(v.y-P.top)*.1;
   if(v.z>ZF)v.z=ZF; if(v.y<YB)v.y=YB; v.y-=YB-.02; pa.setXYZ(i,v.x,v.y,v.z)}
  g.computeVertexNormals();
- const cols=[],nm=g.attributes.normal,c=new THREE.Color();
- for(let i=0;i<pa.count;i+=3){const ny=nm.getY(i),r=kr();
-  if(ny>.55&&r<.45)c.setHex(0xAFB883);else c.setHex(0xA3A199).offsetHSL(0,0,(r-.5)*.06);
+ let FLAT={x0:-1,x1:1,y0:1,y1:2};
+ {const xs=[],ys=[];for(let i=0;i<pa.count;i++)if(Math.abs(pa.getZ(i)-ZF)<1e-6){xs.push(pa.getX(i));ys.push(pa.getY(i))}
+  xs.sort((a,b)=>a-b);ys.sort((a,b)=>a-b);const q=(A,f)=>A[Math.floor(f*(A.length-1))];
+  if(xs.length>3)FLAT={x0:q(xs,.08),x1:q(xs,.92),y0:q(ys,.08),y1:q(ys,.92)}}
+ const top=Math.max(...Array.from({length:pa.count},(_,i)=>pa.getY(i)));
+ const cols=[],nm=g.attributes.normal,c=new THREE.Color(),cen=new THREE.Vector3();
+ for(let i=0;i<pa.count;i+=3){const ny=nm.getY(i),r=rn();
+  cen.set((pa.getX(i)+pa.getX(i+1)+pa.getX(i+2))/3,(pa.getY(i)+pa.getY(i+1)+pa.getY(i+2))/3,(pa.getZ(i)+pa.getZ(i+1)+pa.getZ(i+2))/3);
+  const ca=Math.atan2(cen.x,cen.z);
+  const nearChalk=P.chalk.some(([a,h])=>{let d=Math.abs(ca-a);d=Math.min(d,TAU-d);return d<.28+r*.12&&Math.abs(cen.y-h)<.34+r*.16});
+  const ledge=ny>.8&&cen.y<top-.25&&cen.y>.4;
+  if(nearChalk&&r<.8)c.setHex(0xECEAE4).offsetHSL(0,0,(r-.5)*.03);
+  else if(ledge&&r<.7)c.setHex(0xE1DFD8);
+  else if(ny>.6&&cen.y>top-.2&&r<.5)c.setHex(P.lichen);
+  else c.setHex(P.rock).offsetHSL(0,0,(r-.5)*.06);
   for(let j=0;j<3;j++)cols.push(c.r,c.g,c.b)}
  g.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));
- const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,flatShading:true,roughness:1}));m.castShadow=m.receiveShadow=true;pivot.add(m)}
-const decalC=document.createElement('canvas');decalC.width=1024;decalC.height=640;
-const decalT=new THREE.CanvasTexture(decalC);decalT.anisotropy=8;
-const decal=new THREE.Mesh(new THREE.PlaneGeometry(3.0,1.875),new THREE.MeshBasicMaterial({map:decalT,transparent:true,polygonOffset:true,polygonOffsetFactor:-2}));
-decal.position.set(0,-YB+.12,ZF+.015);pivot.add(decal);
+ const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,flatShading:true,roughness:1}));
+ m.castShadow=m.receiveShadow=true;return{m,FLAT}}
 
-function drawDecal(i){const x=decalC.getContext('2d'),W=1024,H=640;x.clearRect(0,0,W,H);
+const padRay=new THREE.Raycaster();
+function buildIsland(P){
+ const G=new THREE.Group(),rn=mulberry32(P.seed+7);
+ G.add(slab(P.slabR,P.grass,10,P.seed+3,.14));
+ for(const [x,z,sc] of P.trees)G.add(pine(x,z,sc,rn));
+ for(const [x,z,sc] of P.rocks)G.add(rock(x,z,sc,P.rock,rn));
+ for(let i=0;i<9;i++){const t=mesh(new THREE.ConeGeometry(.08,.34,3),P.tuft);const a=rn()*TAU,d=3+rn()*1.8;t.position.set(Math.sin(a)*d,.3,Math.cos(a)*d*.8);G.add(t)}
+ const {m,FLAT}=buildRock(P);G.add(m);G.updateMatrixWorld(true);
+ // crash pads under the overhanging side, pushed out until they clear the rock
+ for(const [i,col] of P.pads.entries()){
+  const a=P.over+(i?-.55:.35),dir=new THREE.Vector3(Math.sin(a),0,Math.cos(a));
+  let reach=1.4;
+  for(const yy of [.2,.5,.9,1.4,1.9]){const o=dir.clone().multiplyScalar(9);o.y=yy;
+   padRay.set(o,dir.clone().negate());const h=padRay.intersectObject(m,false)[0];
+   if(h)reach=Math.max(reach,Math.hypot(h.point.x,h.point.z))}
+  const pad=new THREE.Group();pad.add(mesh(new THREE.BoxGeometry(1.75,.26,1.3),col));
+  const st=mesh(new THREE.BoxGeometry(1.77,.27,.18),0x2B2B2B);pad.add(st);
+  pad.position.copy(dir).multiplyScalar(reach+.85);pad.position.y=.27;pad.rotation.y=a+(i?.4:-.25);G.add(pad)}
+ return{G,FLAT}}
+
+const ISLANDS=[
+ // postcards: open meadow, warm grey granite, one pad
+ {seed:21,box:2.6,wide:1.35,tall:1.05,lean:.14,over:-.9,overAmt:.5,ledgeAng:.5,ledgeY:.5,ledgeAmt:.16,step:.8,top:1.7,f1:1.9,f2:3.3,
+  rock:0xA3A199,lichen:0xAFB883,grass:0xCBD1A6,tuft:0x7FA06B,slabR:5.6,pads:[0x304C7E],
+  trees:[[-4,-3.4,1.25],[4.2,-3.2,1.05],[-2.6,-4.6,.9]],rocks:[[3.4,1.8,.3],[-3.2,2.2,.22],[2.4,3.2,.16]],
+  chalk:[[-55,1.9],[48,2.3],[75,1.1],[-85,1.3],[150,2.1],[-140,1.6]].map(([a,h])=>[a*Math.PI/180,h]),cuts:[[-.85,.3,-.2,2.35],[.72,.45,-.45,2.2],[.2,-.1,-1,1.9],[-.4,.6,.55,2.5],[.9,-.2,.35,2.9]]},
+ // hinge: darker rock in deeper green, squarer block, two pads
+ {seed:47,box:3.4,wide:1.2,tall:1.2,lean:-.12,over:.8,overAmt:.62,ledgeAng:-.6,ledgeY:.95,ledgeAmt:.2,step:.7,top:1.9,f1:2.4,f2:2.6,
+  rock:0x8E8C88,lichen:0x94A972,grass:0xB5C495,tuft:0x6B8F5C,slabR:5.2,pads:[0x304C7E,0x3B4453],
+  trees:[[-4.4,-3,1.05],[3.4,-4,1.3],[4.6,-1.4,.85],[-2,-4.8,1.15]],rocks:[[-3.6,1.6,.34],[3,2.6,.24],[-1.6,3.4,.18]],
+  chalk:[[-40,2.1],[35,1.6],[95,1.4],[-110,1.2],[165,1.8],[-15,2.5]].map(([a,h])=>[a*Math.PI/180,h]),cuts:[[-.7,.55,-.3,2.1],[.85,.2,-.3,2.15],[0,.2,-1,2.0],[-.2,.8,.5,2.3],[.55,-.35,.6,2.6]]},
+ // third slot: pale sandstone on dry ground, one pad
+ {seed:83,box:2.2,wide:1.5,tall:.95,lean:.2,over:-.3,overAmt:.45,ledgeAng:1.4,ledgeY:1.2,ledgeAmt:.18,step:.9,top:1.5,f1:1.5,f2:4.1,
+  rock:0xB8AE9C,lichen:0xC2B486,grass:0xD2CFA6,tuft:0x9AA672,slabR:5.9,pads:[0x6DB59A],
+  trees:[[-4.8,-3.6,.95],[4.4,-3.6,1.15]],rocks:[[3.8,1.4,.28],[-3.4,2.6,.3],[2,3.4,.2],[-2.2,3.2,.16]],
+  chalk:[[-65,1.5],[25,1.9],[110,1.1],[-125,1.4]].map(([a,h])=>[a*Math.PI/180,h]),cuts:[[-.9,.2,-.1,2.5],[.6,.6,-.5,2.0],[.1,0,-1,2.2],[-.3,.5,.7,2.4]]}
+].map(P=>{const I=buildIsland(P);island.add(I.G);I.G.visible=false;return I});
+
+// each boulder wears its own sign, fixed to that rock's flat face
+const DECALS=ISLANDS.map((I,i)=>{
+ const c=document.createElement('canvas');c.width=1024;c.height=640;
+ const tex=new THREE.CanvasTexture(c);tex.anisotropy=8;
+ const F=I.FLAT,DH=Math.min(1.9,(F.y1-F.y0)*.95,(F.x1-F.x0)*.95*.625);
+ const m=new THREE.Mesh(new THREE.PlaneGeometry(DH/.625,DH),new THREE.MeshBasicMaterial({map:tex,transparent:true,polygonOffset:true,polygonOffsetFactor:-2}));
+ m.position.set((F.x0+F.x1)/2,(F.y0+F.y1)/2,ZF+.02);I.G.add(m);
+ return{c,tex,m}});
+function showIsland(i){ISLANDS.forEach((I,k)=>I.G.visible=k===i)}
+showIsland(0);
+
+function drawDecal(i){const D=DECALS[i],x=D.c.getContext('2d'),W=1024,H=640;x.clearRect(0,0,W,H);
  const F=(w,s)=>`${w} ${s}px Satoshi, Helvetica, Arial, sans-serif`;
  const track=(t,px,py,sp,align)=>{let w=0;for(const ch of t)w+=x.measureText(ch).width+sp;w-=sp;let cx=align==='center'?px-w/2:align==='right'?px-w:px;for(const ch of t){x.fillText(ch,cx,py);cx+=x.measureText(ch).width+sp}};
  x.textBaseline='alphabetic';
@@ -426,49 +691,50 @@ function drawDecal(i){const x=decalC.getContext('2d'),W=1024,H=640;x.clearRect(0
   for(let p=0;p<4;p++){x.globalAlpha=.35;x.fillText('coming soon...',120+(kr()-.5)*5,360+(kr()-.5)*5)}
   x.globalAlpha=.25;x.lineWidth=6;x.strokeStyle='#fff';x.beginPath();x.moveTo(126,400);x.quadraticCurveTo(500,425,880,392);x.stroke();x.globalAlpha=1;
  }
- decalT.needsUpdate=true}
+ D.tex.needsUpdate=true}
 
 /* ---------- camera state ---------- */
-const ROOMS=['campsite','projects','crag'], LABEL=["christian’s campsite","the projects","the crag"];
+const ROOMS=['campsite','projects','crag'], LABEL=["christian’s campsite","the projects","boulder breakdown"];
 const CAMP=0,GYM=1,CRAG=2;
 let cur=GYM, transitioning=false, activeWall=0, cragIdx=0, spinning=false;
-const st={gym:0,vel:0,camp:0,campVel:0,autoRot:false,lastWheel:0};
+const st={gym:0,vel:0,camp:0,campVel:0,autoRot:false,lastWheel:0,lastInput:0};
 const cam={tx:0,ty:1.8,tz:0,d:20,theta:0,elev:.26,ax:.5,ay:.52};
 function fitD(radius,f,fv){const t=Math.tan(camera.fov*Math.PI/360),a=camera.aspect;return Math.max(radius/(f*t*a),radius/(fv*t))}
 function cfg(i){const m=mob();
  if(i===GYM)return{tx:GX,ty:1.75,tz:0,d:fitD(3.6,m?.78:.36,m?.42:.5),elev:.32,ax:.5,ay:m?.47:.52};
- if(i===CAMP)return{tx:CX,ty:.6,tz:.4,d:fitD(7.4,m?.95:.52,m?.55:.7),elev:.46,ax:.5,ay:m?.47:.56};
- return{tx:KX,ty:1.35,tz:0,d:fitD(3.7,m?.72:.29,m?.34:.5),elev:.12,ax:m?.5:.28,ay:m?.3:.5}}
+ if(i===CAMP)return{tx:CX,ty:.6,tz:CZ+.4,d:fitD(7.4,m?.95:.52,m?.55:.7),elev:.46,ax:.5,ay:m?.47:.56};
+ return{tx:KX,ty:1.35,tz:KZ,d:fitD(3.8,m?.72:.29,m?.34:.5),elev:.2,ax:m?.5:.28,ay:m?.3:.5}}
 function thetaOf(i){return i===GYM?st.gym:i===CAMP?st.camp:0}
 
 /* ---------- UI ---------- */
-const pL=$('#pL'),pR=$('#pR'),hud=$('#hud'),pCase=$('#pCase'),caseIn=$('#pCase .in'),shuf=$('#shuffle');
+const pL=$('#pL'),pR=$('#pR'),hud=$('#hud'),tabs=$('#tabs'),pCase=$('#pCase'),caseIn=$('#pCase .in'),shuf=$('#shuffle');
 function swap(el,html,delay=0){if(reduce){el.innerHTML=html;gsap.set(el,{autoAlpha:1});return}
  gsap.killTweensOf(el);gsap.to(el,{autoAlpha:0,y:8,duration:.18,delay,onComplete(){el.innerHTML=html;gsap.fromTo(el,{autoAlpha:0,y:-8},{autoAlpha:1,y:0,duration:.45,ease:'power2.out'})}})}
 const esc=s=>s;
 function gymHTML(k){const p=PROJECTS[k];
  const L=`<div class="eyebrow"><i style="background:${p.color}"></i>${p.set}</div><h2>${p.headline}</h2>`;
- const Rr=(p.meta.length?`<dl class="meta" style="margin-bottom:18px">${p.meta.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`:'')+(p.stats.length?`<div class="stats">${p.stats.map(([a,b])=>`<div><b>${a}</b><span>${b}</span></div>`).join('')}</div>`:'')+`<p>${p.blurb}</p>`+(k<2?`<button class="cta" data-case="${k}">Read it at the crag &rarr;</button>`:'');
+ const Rr=(p.meta.length?`<dl class="meta" style="margin-bottom:18px">${p.meta.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`:'')+(p.stats.length?`<div class="stats">${p.stats.map(([a,b])=>`<div><b>${a}</b><span>${b}</span></div>`).join('')}</div>`:'')+`<p>${p.blurb}</p>`+(k<2?`<button class="cta" data-case="${k}">Read the breakdown &rarr;</button>`:'');
  return[L,Rr]}
-function hudGym(){return `<div class="tabs">${PROJECTS.map((p,k)=>`<button class="tab${k===activeWall?' on':''}" data-wall="${k}"><i style="background:${p.color}"></i>${p.title}</button>`).join('')}</div><div>drag or scroll to walk around the boulder</div>`}
+function tabsHTML(){return PROJECTS.map((p,k)=>`<button class="tab${k===activeWall?' on':''}" data-wall="${k}"><i style="background:${p.color}"></i>${p.title}</button>`).join('')}
+function hudGym(){return '<div>drag or scroll to walk around the boulder</div>'}
 function campHTML(key){if(!key)return[`<div class="eyebrow"><i style="background:#6DB59A"></i>christian’s campsite</div><h2>A few things I carry, and the stories behind them.</h2>`,
- `<p>Everything with a small blue marker above it has a story. Hover over it, or tap it on a phone.</p><p style="font-size:13px;color:var(--ink-3)">Five objects so far: a lantern, a film camera, an enamel mug, a sketchbook and a chalk bag.</p>`];
+ `<p>Everything with a small blue marker above it has a story. Hover over it, or tap it on a phone.</p><p style="font-size:13px;color:var(--ink-3)">Five objects so far: a snowboard, a camp skillet, a bible, a suitcase and a camp cup.</p>`];
  const it=ITEMS[key];return[`<div class="eyebrow"><i style="background:${it.color}"></i>${it.tag}</div><h2>${it.name}</h2><span class="chip">[Placeholder copy]</span>`,`<p>${it.body}</p><p style="font-size:13px;color:var(--ink-3)">Sample prompt. Replace with the real story in your own words.</p>`]}
 function showRoom(i){
- if(i===GYM){const[a,b]=gymHTML(activeWall);swap(pL,a);swap(pR,b,.05);swap(hud,hudGym(),.1);gsap.to([pCase,shuf],{autoAlpha:0,duration:.2})}
- else if(i===CAMP){const[a,b]=campHTML(activeItem&&activeItem.userData.key);swap(pL,a);swap(pR,b,.05);swap(hud,'<div>drag to look around the campsite</div>',.1);gsap.to([pCase,shuf],{autoAlpha:0,duration:.2})}
- else{gsap.to([pL,pR,hud],{autoAlpha:0,duration:.2});caseIn.innerHTML=CASES[PROJECTS[cragIdx].key];pCase.scrollTop=0;updShuffle();gsap.fromTo(pCase,{autoAlpha:0,y:12},{autoAlpha:1,y:0,duration:.5});gsap.to(shuf,{autoAlpha:1,duration:.4})}}
+ if(i===GYM){const[a,b]=gymHTML(activeWall);swap(pL,a);swap(pR,b,.05);swap(hud,hudGym(),.1);swap(tabs,tabsHTML(),.1);gsap.to([pCase,shuf],{autoAlpha:0,duration:.2})}
+ else if(i===CAMP){const[a,b]=campHTML(activeItem&&activeItem.userData.key);swap(pL,a);swap(pR,b,.05);swap(hud,'<div>drag to look around the campsite</div>',.1);gsap.to([tabs,pCase,shuf],{autoAlpha:0,duration:.2})}
+ else{gsap.to([pL,pR,hud,tabs],{autoAlpha:0,duration:.2});caseIn.innerHTML=CASES[PROJECTS[cragIdx].key];pCase.scrollTop=0;updShuffle();gsap.fromTo(pCase,{autoAlpha:0,y:12},{autoAlpha:1,y:0,duration:.5});gsap.to(shuf,{autoAlpha:1,duration:.4})}}
 function updButtons(){const l=(cur+2)%3,r=(cur+1)%3;$('#prev .lbl').textContent=LABEL[l];$('#next .lbl').textContent=LABEL[r];
  $('#prev').setAttribute('aria-label','Go to '+LABEL[l]);$('#next').setAttribute('aria-label','Go to '+LABEL[r])}
 function updShuffle(){shuf.querySelector('span').textContent=`${cragIdx+1} / 3 · ${PROJECTS[cragIdx].title}`}
 
 function go(next,opt={}){if(transitioning||next===cur)return;transitioning=true;
  const from=cur;cur=next;updButtons();setActiveItem(null,true);
- gsap.to([pL,pR,hud,pCase,shuf],{autoAlpha:0,duration:.25});
+ gsap.to([pL,pR,hud,tabs,pCase,shuf],{autoAlpha:0,duration:.25});
  const k=Math.round(cam.theta/TAU);cam.theta-=k*TAU;if(from===GYM)st.gym-=k*TAU;
  if(next===GYM){st.gym=PHI(activeWall);st.gym+=TAU*Math.round((cam.theta-st.gym)/TAU)}
  const c=cfg(next),dur=reduce?.01:1.9,dt=thetaOf(next);
- if(opt.project!=null&&next===CRAG){cragIdx=opt.project;drawDecal(cragIdx)}
+ if(opt.project!=null&&next===CRAG){cragIdx=opt.project;showIsland(cragIdx)}
  const tl=gsap.timeline({onComplete(){transitioning=false;showRoom(next)}});
  tl.to(cam,{tx:c.tx,ty:c.ty,tz:c.tz,theta:dt,ax:c.ax,ay:c.ay,duration:dur,ease:'power3.inOut'},0)
    .to(cam,{d:Math.max(cam.d,c.d)*1.5,elev:.55,duration:dur*.5,ease:'power2.out'},0)
@@ -479,21 +745,22 @@ $('#next').onclick=()=>go((cur+1)%3);
 document.addEventListener('click',e=>{const t=e.target.closest('[data-wall],[data-case]');if(!t)return;
  if(t.dataset.wall!=null)rotateTo(+t.dataset.wall);else go(CRAG,{project:+t.dataset.case})});
 
-function rotateTo(k){const target=PHI(k)+TAU*Math.round((st.gym-PHI(k))/TAU);st.autoRot=true;st.vel=0;
+function rotateTo(k){st.lastInput=performance.now();const target=PHI(k)+TAU*Math.round((st.gym-PHI(k))/TAU);st.autoRot=true;st.vel=0;
  gsap.to(st,{gym:target,duration:reduce?.01:1,ease:'power3.inOut',onComplete(){st.autoRot=false}})}
 function setWall(k){if(k===activeWall)return;activeWall=k;if(cur!==GYM||transitioning)return;const[a,b]=gymHTML(k);swap(pL,a);swap(pR,b,.06);
- hud.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===k))}
+ tabs.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===k))}
 
-/* shuffle */
+/* shuffle: spins the whole island and lands on the next project's boulder */
 function spinRock(to,arrival){if(spinning)return;spinning=true;const next=to!=null?to:arrival?cragIdx:(cragIdx+1)%3;
- const s={a:0};let swapped=arrival;
- if(!arrival){gsap.to(pCase,{autoAlpha:0,duration:.25})}
- const dur=reduce?.01:1.5;
- const tl=gsap.timeline({onComplete(){spinning=false;pivot.rotation.y=0;
+ const st2={a:0};let swapped=arrival;
+ if(!arrival)gsap.to(pCase,{autoAlpha:0,duration:.25});
+ const dur=reduce?.01:1.6;
+ const tl=gsap.timeline({onComplete(){spinning=false;island.rotation.y=0;
    if(!arrival){cragIdx=next;caseIn.innerHTML=CASES[PROJECTS[next].key];pCase.scrollTop=0;updShuffle();gsap.fromTo(pCase,{autoAlpha:0,y:12},{autoAlpha:1,y:0,duration:.5})}}});
- tl.to(pivot.position,{y:.7,duration:dur*.25,ease:'power2.out'},0)
-   .to(s,{a:TAU*3,duration:dur,ease:'power3.inOut',onUpdate(){pivot.rotation.y=s.a;if(!swapped&&s.a>TAU*1.5){swapped=true;drawDecal(next)}}},0)
-   .to(pivot.position,{y:0,duration:dur*.4,ease:'bounce.out'},dur*.62)}
+ tl.to(island.position,{y:.5,duration:dur*.25,ease:'power2.out'},0)
+   .to(st2,{a:TAU*3,duration:dur,ease:'power3.inOut',onUpdate(){island.rotation.y=st2.a;
+     if(!swapped&&st2.a>TAU*1.5){swapped=true;showIsland(next)}}},0)
+   .to(island.position,{y:0,duration:dur*.4,ease:'bounce.out'},dur*.62)}
 shuf.onclick=()=>spinRock();
 
 /* ---------- input ---------- */
@@ -504,17 +771,21 @@ function setActiveItem(g,silent){if(g===activeItem)return;
  if(activeItem){gsap.to(activeItem.userData,{lift:0,duration:reduce?.01:.6,ease:'power2.inOut'})}
  activeItem=g;if(g)gsap.to(g.userData,{lift:1,duration:reduce?.01:.7,ease:'back.out(1.8)'});
  if(!silent&&cur===CAMP&&!transitioning){const[a,b]=campHTML(g&&g.userData.key);swap(pL,a);swap(pR,b,.04)}}
-canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY,lx:e.clientX,moved:0,type:e.pointerType};canvas.setPointerCapture(e.pointerId);if(cur!==CRAG)canvas.classList.add('grabbing');st.vel=0;st.autoRot=false;gsap.killTweensOf(st)});
+canvas.addEventListener('pointerdown',e=>{st.lastInput=performance.now();down={x:e.clientX,y:e.clientY,lx:e.clientX,moved:0,type:e.pointerType};canvas.setPointerCapture(e.pointerId);if(cur!==CRAG)canvas.classList.add('grabbing');st.vel=0;st.autoRot=false;gsap.killTweensOf(st)});
 canvas.addEventListener('pointermove',e=>{
- if(down){const dx=e.clientX-down.lx;down.lx=e.clientX;down.moved+=Math.abs(dx);
+ if(down){st.lastInput=performance.now();const dx=e.clientX-down.lx;down.lx=e.clientX;down.moved+=Math.abs(dx);
   if(!transitioning){if(cur===GYM){st.gym-=dx*.006;st.vel=-dx*.006}else if(cur===CAMP){st.camp=Math.max(-.7,Math.min(.7,st.camp-dx*.004))}}
   return}
  if(cur===CAMP&&!transitioning&&e.pointerType==='mouse'){hovered=pick(e);canvas.classList.toggle('point',!!hovered);setActiveItem(hovered||pinned)}});
+canvas.addEventListener('pointerleave',()=>{if(cur===CAMP&&!transitioning){hovered=null;canvas.classList.remove('point');setActiveItem(pinned)}});
+addEventListener('blur',()=>{hovered=null;if(cur===CAMP)setActiveItem(pinned)});
+document.addEventListener('pointermove',e=>{if(cur!==CAMP||transitioning||down)return;
+ if(e.target!==canvas&&hovered){hovered=null;canvas.classList.remove('point');setActiveItem(pinned)}});
 canvas.addEventListener('pointerup',e=>{canvas.classList.remove('grabbing');
  if(down&&down.moved<6&&cur===CAMP&&!transitioning){const g=pick(e);pinned=g;setActiveItem(g)}down=null});
 addEventListener('wheel',e=>{if(e.target.closest('#pCase,#pL,#pR'))return;if(cur!==GYM||transitioning)return;e.preventDefault();
- st.autoRot=false;gsap.killTweensOf(st);st.vel=0;st.gym+=e.deltaY*.0022;st.lastWheel=performance.now()},{passive:false});
-addEventListener('keydown',e=>{if(transitioning)return;
+ st.autoRot=false;gsap.killTweensOf(st);st.vel=0;st.gym+=e.deltaY*.0022;st.lastWheel=st.lastInput=performance.now()},{passive:false});
+addEventListener('keydown',e=>{if(transitioning)return;st.lastInput=performance.now();
  if(cur===GYM&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){rotateTo((activeWall+(e.key==='ArrowRight'?1:2))%3)}
  if(cur===CRAG&&e.key===' '&&document.activeElement===document.body){e.preventDefault();spinRock()}});
 
@@ -522,10 +793,14 @@ addEventListener('keydown',e=>{if(transitioning)return;
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
 addEventListener('resize',resize);resize();
 const clock=new THREE.Clock(),tgt=new THREE.Vector3(),tmp=new THREE.Vector3();
-function frame(){const t=clock.getElapsedTime();
- // gym physics
+let lastT=0;
+function frame(){const t=clock.getElapsedTime(),dt=Math.min(.05,t-lastT);lastT=t;
+ // the boulder turns slowly on its own, holds still while you drive it, drifts again after 10s
+ const idle=performance.now()-st.lastInput>10000;
  if(!down&&!st.autoRot){st.gym+=st.vel;st.vel*=.9;
-  if(Math.abs(st.vel)<.002&&performance.now()-st.lastWheel>180){const seg=TAU/3,snap=Math.round(st.gym/seg)*seg;st.gym+=(snap-st.gym)*.08}}
+  if(Math.abs(st.vel)<.002&&performance.now()-st.lastWheel>180){
+   if(idle&&cur===GYM&&!transitioning)st.gym+=dt*.11;
+   else{const seg=TAU/3,snap=Math.round(st.gym/seg)*seg;st.gym+=(snap-st.gym)*.08}}}
  const w=((Math.round(st.gym/(TAU/3))%3)+3)%3;setWall(w);
  // camera
  if(!transitioning){const c=cfg(cur);Object.assign(cam,c);cam.theta=thetaOf(cur)}
@@ -542,17 +817,17 @@ function frame(){const t=clock.getElapsedTime();
   g.rotation.y=u.ry+u.spin;g.rotation.z=Math.sin(t*1.7)*.06*u.lift;
   u.marker.position.y=u.base.y+1.1+Math.sin(t*2.4+u.base.x)*.06;u.marker.rotation.y=t;u.marker.visible=u.lift<.3}
  // shuffle button under the rock
- if(cur===CRAG||transitioning){tmp.set(KX,0,2.9).project(camera);const sx=(tmp.x*.5+.5)*W,sy=(-tmp.y*.5+.5)*H;
+ if(cur===CRAG||transitioning){tmp.set(KX,0,KZ+2.9).project(camera);const sx=(tmp.x*.5+.5)*W,sy=(-tmp.y*.5+.5)*H;
   shuf.style.transform=`translate(${Math.round(sx)}px,${Math.round(Math.min(sy+14,H-64))}px) translateX(-50%)`}
  renderer.render(scene,camera);requestAnimationFrame(frame)}
 
 /* ---------- boot ---------- */
-updButtons();drawDecal(0);
-const[a0,b0]=gymHTML(0);pL.innerHTML=a0;pR.innerHTML=b0;hud.innerHTML=hudGym();gsap.set([pCase,shuf],{autoAlpha:0});
+updButtons();DECALS.forEach((d,i)=>drawDecal(i));
+const[a0,b0]=gymHTML(0);pL.innerHTML=a0;pR.innerHTML=b0;hud.innerHTML=hudGym();tabs.innerHTML=tabsHTML();gsap.set([pCase,shuf],{autoAlpha:0});
 Object.assign(cam,cfg(GYM));
 if(!reduce){transitioning=true;const c=cfg(GYM);cam.d=c.d*1.7;cam.elev=.7;cam.theta=-.9;
  gsap.to(cam,{d:c.d,elev:c.elev,theta:0,duration:2.2,ease:'power3.out',onComplete(){transitioning=false}})}
-document.fonts&&document.fonts.load('700 40px Satoshi').then(()=>document.fonts.load('500 40px Satoshi')).then(()=>drawDecal(cragIdx)).catch(()=>{});
+document.fonts&&document.fonts.load('700 40px Satoshi').then(()=>document.fonts.load('500 40px Satoshi')).then(()=>{DECALS.forEach((d,i)=>drawDecal(i));window.__posterDraw&&window.__posterDraw()}).catch(()=>{});
 frame();
 })();
 </script>
